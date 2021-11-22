@@ -18,6 +18,9 @@ BONECO_HEIGHT = 40
 font = pygame.font.SysFont(None, 48)
 boneco_img = pygame.image.load('assets/hulk.png').convert_alpha()
 boneco_img = pygame.transform.scale(boneco_img, (BONECO_WIDTH, BONECO_HEIGHT))
+boneco1_img = pygame.image.load('assets/chewbaca.png').convert_alpha()
+boneco1_img = pygame.transform.scale(boneco1_img, (BONECO_WIDTH, BONECO_HEIGHT))
+
 
 # ----- Inicia estruturas de dados
 # Definindo os novos tipos
@@ -28,8 +31,34 @@ class Player1(pygame.sprite.Sprite):
 
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.centerx = 0
-        self.rect.bottom = HEIGHT - 10
+        self.rect.centerx = 40
+        self.rect.bottom = HEIGHT - 25
+        self.speedx = 0
+        self.speedy = 0
+
+    def update(self):
+        # Atualização da posição do boneco
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+
+        # Mantem dentro da tela
+        if self.rect.right > WIDTH:
+            self.rect.right = WIDTH
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.bottom > HEIGHT:
+            self.rect.bottom = HEIGHT
+class Player2(pygame.sprite.Sprite):
+    def __init__(self, img):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.centerx = 560
+        self.rect.bottom =  50
         self.speedx = 0
         self.speedy = 0
 
@@ -58,8 +87,9 @@ FPS = 30
 all_sprites = pygame.sprite.Group()
 # Criando o jogador
 player1 = Player1(boneco_img)
+player2 = Player2(boneco1_img)
 all_sprites.add(player1)
-
+all_sprites.add(player2)
 
 # ===== Loop principal =====
 while game:
@@ -94,7 +124,30 @@ while game:
                 player1.speedy = 0
             if event.key == pygame.K_DOWN:
                 player1.speedy = 0      
-            
+        # Verifica se apertou alguma tecla.
+        if event.type == pygame.KEYDOWN:    
+            # Dependendo da tecla, altera a velocidade.
+            if event.key == pygame.K_a:
+                player2.speedx -= 3
+            if event.key == pygame.K_d:
+                player2.speedx += 3
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_a:
+                player2.speedx = 0
+            if event.key == pygame.K_d:
+                player2.speedx = 0            
+        # Verifica se apertou alguma tecla.
+        if event.type == pygame.KEYDOWN:    
+            # Dependendo da tecla, altera a velocidade.
+            if event.key == pygame.K_w:
+                player2.speedy -= 3
+            if event.key == pygame.K_s:
+                player2.speedy += 3
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_w:
+                player2.speedy = 0
+            if event.key == pygame.K_s:
+                player2.speedy = 0                  
 
 
     # ----- Atualiza estado do jogo
