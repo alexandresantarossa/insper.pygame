@@ -6,7 +6,7 @@ import random
 pygame.init()
 
 # ----- Gera tela principal
-WIDTH = 600
+WIDTH = 1000
 HEIGHT = 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Bombinha')
@@ -15,15 +15,47 @@ pygame.display.set_caption('Bombinha')
 
 BONECO_WIDTH = 45
 BONECO_HEIGHT = 40
+BRICK_WIDTH=100
+BRICK_HEIGHT=100
+WOOD_WIDTH=52
+WOOD_HEIGHT=52
 font = pygame.font.SysFont(None, 48)
 boneco_img = pygame.image.load('assets/hulk.png').convert_alpha()
 boneco_img = pygame.transform.scale(boneco_img, (BONECO_WIDTH, BONECO_HEIGHT))
 boneco1_img = pygame.image.load('assets/chewbaca.png').convert_alpha()
 boneco1_img = pygame.transform.scale(boneco1_img, (BONECO_WIDTH, BONECO_HEIGHT))
+brick_img = pygame.image.load('assets/brick.png').convert_alpha()
+brick_img = pygame.transform.scale(brick_img, (BRICK_WIDTH, BRICK_HEIGHT)) 
+wood_img = pygame.image.load('assets/wood.png').convert_alpha()
+wood_img = pygame.transform.scale(wood_img, (WOOD_WIDTH, WOOD_HEIGHT))
 
 
 # ----- Inicia estruturas de dados
 # Definindo os novos tipos
+class brick(pygame.sprite.Sprite):
+    def __init__(self, img):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.centerx = 25
+        self.rect.bottom = 80
+
+class wood(pygame.sprite.Sprite):
+    def __init__(self, img):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.centerx = random.randint(25,WIDTH-25)
+        self.rect.bottom = random.randint(80,HEIGHT-25)
+        
+
+
+
+
 class Player1(pygame.sprite.Sprite):
     def __init__(self, img):
         # Construtor da classe mãe (Sprite).
@@ -57,7 +89,7 @@ class Player2(pygame.sprite.Sprite):
 
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.centerx = 560
+        self.rect.centerx = 760
         self.rect.bottom =  50
         self.speedx = 0
         self.speedy = 0
@@ -82,14 +114,24 @@ game = True
 # Variável para o ajuste de velocidade
 clock = pygame.time.Clock()
 FPS = 30
+# Criando um grupo de blocos
+all_woods = pygame.sprite.Group()
+# Criando os blocos
+for i in range(8):
+    madeiras=wood(wood_img)
+    all_woods.add(madeiras)
 
 # Criando um grupo de sprites
 all_sprites = pygame.sprite.Group()
 # Criando o jogador
+
 player1 = Player1(boneco_img)
 player2 = Player2(boneco1_img)
+blocos=brick(brick_img)
 all_sprites.add(player1)
 all_sprites.add(player2)
+all_sprites.add(blocos)
+all_sprites.add(all_woods)
 
 # ===== Loop principal =====
 while game:
