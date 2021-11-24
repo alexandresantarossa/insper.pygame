@@ -39,8 +39,8 @@ class brick(pygame.sprite.Sprite):
 
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.centerx = 25
-        self.rect.bottom = 80
+        self.rect.centerx = random.randint(25,WIDTH - 25)
+        self.rect.bottom = random.randint(80,HEIGHT - 25)
 
 class wood(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -114,10 +114,15 @@ game = True
 # Variável para o ajuste de velocidade
 clock = pygame.time.Clock()
 FPS = 30
-# Criando um grupo de blocos
+# Criando um grupo de blocos 
 all_woods = pygame.sprite.Group()
+all_bricks = pygame.sprite.Group()
 # Criando os blocos
 for i in range(8):
+
+    pedra = brick(brick_img)
+    all_bricks.add(pedra)
+
     madeiras=wood(wood_img)
     all_woods.add(madeiras)
 
@@ -127,10 +132,9 @@ all_sprites = pygame.sprite.Group()
 
 player1 = Player1(boneco_img)
 player2 = Player2(boneco1_img)
-blocos=brick(brick_img)
 all_sprites.add(player1)
 all_sprites.add(player2)
-all_sprites.add(blocos)
+all_sprites.add(all_bricks)
 all_sprites.add(all_woods)
 
 # ===== Loop principal =====
@@ -195,6 +199,37 @@ while game:
     # ----- Atualiza estado do jogo
     # Atualizando a posição das sprites
     all_sprites.update()
+
+    # verifica colisões entre os blocos, se o bloco de madeira ou pedra encostar em outro ele adiciona em outro lugar 
+    colisao_p_m = pygame.sprite.groupcollide(all_bricks, all_woods, True, True)
+    
+    for p in colisao_p_m:
+        p = brick(brick_img)
+        all_sprites.add(p)
+        all_bricks.add(p)
+    
+    for m in colisao_p_m:
+        m = wood(wood_img)
+        all_sprites.add(m)
+        all_woods.add(m)
+
+    # colisao_m_m =  pygame.sprite.groupcollide(all_woods, all_woods, True, False)
+    
+    # for i in colisao_m_m:
+    #     i = wood(wood_img)
+    #     all_sprites.add(i)
+    #     all_woods.add(i)
+
+    # colisao_p_p =  pygame.sprite.groupcollide(all_bricks, all_bricks,False, True)
+
+    # for j in colisao_p_p:
+    #     j = brick(brick_img)
+    #     all_sprites.add(j)
+    #     all_bricks.add(j)
+
+# TESTA AI TIRAR ESSES COMETARIOS DE CIMA DA FORMA DE COMENTARIO KKKKKKKKKKKKKKKKKK
+        
+
 
     # ----- Gera saídas
     window.fill((0, 255, 100))  # Preenche com a cor verde
