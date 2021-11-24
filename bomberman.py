@@ -6,7 +6,7 @@ import random
 pygame.init()
 
 # ----- Gera tela principal
-WIDTH = 1000
+WIDTH = 800
 HEIGHT = 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Bombinha')
@@ -15,16 +15,16 @@ pygame.display.set_caption('Bombinha')
 
 BONECO_WIDTH = 45
 BONECO_HEIGHT = 40
-BRICK_WIDTH=100
-BRICK_HEIGHT=100
-WOOD_WIDTH=52
-WOOD_HEIGHT=52
+BRICK_WIDTH=50
+BRICK_HEIGHT=50
+WOOD_WIDTH=50
+WOOD_HEIGHT=50
 font = pygame.font.SysFont(None, 48)
 boneco_img = pygame.image.load('assets/hulk.png').convert_alpha()
 boneco_img = pygame.transform.scale(boneco_img, (BONECO_WIDTH, BONECO_HEIGHT))
 boneco1_img = pygame.image.load('assets/chewbaca.png').convert_alpha()
 boneco1_img = pygame.transform.scale(boneco1_img, (BONECO_WIDTH, BONECO_HEIGHT))
-brick_img = pygame.image.load('assets/brick.png').convert_alpha()
+brick_img = pygame.image.load('assets/bricks.png').convert_alpha()
 brick_img = pygame.transform.scale(brick_img, (BRICK_WIDTH, BRICK_HEIGHT)) 
 wood_img = pygame.image.load('assets/wood.png').convert_alpha()
 wood_img = pygame.transform.scale(wood_img, (WOOD_WIDTH, WOOD_HEIGHT))
@@ -118,11 +118,12 @@ FPS = 30
 all_woods = pygame.sprite.Group()
 all_bricks = pygame.sprite.Group()
 # Criando os blocos
-for i in range(8):
+for i in range(40):
 
     pedra = brick(brick_img)
     all_bricks.add(pedra)
 
+for a in range(10):
     madeiras=wood(wood_img)
     all_woods.add(madeiras)
 
