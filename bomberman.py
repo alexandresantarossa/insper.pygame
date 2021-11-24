@@ -88,14 +88,14 @@ class Player1(pygame.sprite.Sprite):
         self.rect.y += self.speedy
 
         # Mantem dentro da tela
-        if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.top < 0:
-            self.rect.top = 0
-        if self.rect.bottom > HEIGHT:
-            self.rect.bottom = HEIGHT
+        if self.rect.right > WIDTH - 50:
+            self.rect.right = WIDTH -50
+        if self.rect.left < 50:
+            self.rect.left = 50
+        if self.rect.top < 50:
+            self.rect.top = 50
+        if self.rect.bottom > HEIGHT - 50:
+            self.rect.bottom = HEIGHT -50
 class Player2(pygame.sprite.Sprite):
     def __init__(self, img):
         # Construtor da classe mãe (Sprite).
@@ -114,14 +114,14 @@ class Player2(pygame.sprite.Sprite):
         self.rect.y += self.speedy
 
         # Mantem dentro da tela
-        if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.top < 0:
-            self.rect.top = 0
-        if self.rect.bottom > HEIGHT:
-            self.rect.bottom = HEIGHT
+        if self.rect.right > WIDTH - 50:
+            self.rect.right = WIDTH - 50
+        if self.rect.left < 50:
+            self.rect.left = 50
+        if self.rect.top < 50:
+            self.rect.top = 50
+        if self.rect.bottom > HEIGHT - 50:
+            self.rect.bottom = HEIGHT - 50
 
 
 game = True
@@ -143,14 +143,6 @@ for l in range (len(LAYOUT)):
             madeira =wood(wood_img,c,l)
             all_woods.add(madeira)
 
-#for i in range(40):
-
-   # pedra = brick(brick_img)
-   # all_bricks.add(pedra)
-
-#for a in range(10):
-   # madeiras=wood(wood_img)
-  #  all_woods.add(madeiras)
 
 # Criando um grupo de sprites
 all_sprites = pygame.sprite.Group()
@@ -226,35 +218,13 @@ while game:
     # Atualizando a posição das sprites
     all_sprites.update()
 
-    # verifica colisões entre os blocos, se o bloco de madeira ou pedra encostar em outro ele adiciona em outro lugar 
-   # colisao_p_m = pygame.sprite.groupcollide(all_bricks, all_woods, True, True)
+    # colisão bloco e personagem
+
+    hits = pygame.sprite.spritecollide(player1, all_bricks, False)
     
-   # for p in colisao_p_m:
-     #   p = brick(brick_img)
-      #  all_sprites.add(p)
-      #  all_bricks.add(p)
-    #
-#for m in colisao_p_m:
-      #  m = wood(wood_img)
-#all_sprites.add(m)
-      #  all_woods.add(m)
-
-    # colisao_m_m =  pygame.sprite.groupcollide(all_woods, all_woods, True, False)
     
-    # for i in colisao_m_m:
-    #     i = wood(wood_img)
-    #     all_sprites.add(i)
-    #     all_woods.add(i)
 
-    # colisao_p_p =  pygame.sprite.groupcollide(all_bricks, all_bricks,False, True)
 
-    # for j in colisao_p_p:
-    #     j = brick(brick_img)
-    #     all_sprites.add(j)
-    #     all_bricks.add(j)
-
-# TESTA AI TIRAR ESSES COMETARIOS DE CIMA DA FORMA DE COMENTARIO KKKKKKKKKKKKKKKKKK
-        
 
 
     # ----- Gera saídas
