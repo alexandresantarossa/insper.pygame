@@ -5,6 +5,10 @@ import random
 
 pygame.init()
 
+#Toca o hino
+pygame.mixer.music.load('assets/matue.mp3')
+pygame.mixer.music.play(-1)
+
 # ----- Gera tela principal
 WIDTH = 750
 HEIGHT = 650
