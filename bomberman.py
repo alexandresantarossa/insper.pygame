@@ -6,13 +6,27 @@ import random
 pygame.init()
 
 # ----- Gera tela principal
-WIDTH = 800
-HEIGHT = 600
+WIDTH = 750
+HEIGHT = 650
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Bombinha')
 
 # ----- Inicia assets
-
+LAYOUT = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,1,1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,0,1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,0,1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,0,1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,0,1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,0,1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,1,1],
+        ]
 BONECO_WIDTH = 45
 BONECO_HEIGHT = 40
 BRICK_WIDTH=50
@@ -33,25 +47,25 @@ wood_img = pygame.transform.scale(wood_img, (WOOD_WIDTH, WOOD_HEIGHT))
 # ----- Inicia estruturas de dados
 # Definindo os novos tipos
 class brick(pygame.sprite.Sprite):
-    def __init__(self, img):
+    def __init__(self, img,x,y):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.centerx = random.randint(25,WIDTH - 25)
-        self.rect.bottom = random.randint(80,HEIGHT - 25)
+        self.rect.x = x*BRICK_WIDTH
+        self.rect.y = y*BRICK_HEIGHT
 
 class wood(pygame.sprite.Sprite):
-    def __init__(self, img):
+    def __init__(self, img,x,y):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.centerx = random.randint(25,WIDTH-25)
-        self.rect.bottom = random.randint(80,HEIGHT-25)
-        
+        self.rect.x = x*WOOD_WIDTH
+        self.rect.y = y*WOOD_HEIGHT
+        print(self.rect.x,self.rect.y)
 
 
 
@@ -63,8 +77,8 @@ class Player1(pygame.sprite.Sprite):
 
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.centerx = 40
-        self.rect.bottom = HEIGHT - 25
+        self.rect.centerx = 75
+        self.rect.bottom = HEIGHT - 50
         self.speedx = 0
         self.speedy = 0
 
@@ -89,8 +103,8 @@ class Player2(pygame.sprite.Sprite):
 
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.centerx = 760
-        self.rect.bottom =  50
+        self.rect.centerx = 675
+        self.rect.bottom =  100
         self.speedx = 0
         self.speedy = 0
 
@@ -118,14 +132,25 @@ FPS = 30
 all_woods = pygame.sprite.Group()
 all_bricks = pygame.sprite.Group()
 # Criando os blocos
-for i in range(40):
 
-    pedra = brick(brick_img)
-    all_bricks.add(pedra)
+for l in range (len(LAYOUT)):
+    for c in range (len(LAYOUT[l])):
+        item = LAYOUT[l][c]
+        if item == 1:
+            pedra = brick(brick_img,c,l)
+            all_bricks.add(pedra)
+        if item == 2:
+            madeira =wood(wood_img,c,l)
+            all_woods.add(madeira)
 
-for a in range(10):
-    madeiras=wood(wood_img)
-    all_woods.add(madeiras)
+#for i in range(40):
+
+   # pedra = brick(brick_img)
+   # all_bricks.add(pedra)
+
+#for a in range(10):
+   # madeiras=wood(wood_img)
+  #  all_woods.add(madeiras)
 
 # Criando um grupo de sprites
 all_sprites = pygame.sprite.Group()
@@ -202,17 +227,17 @@ while game:
     all_sprites.update()
 
     # verifica colisões entre os blocos, se o bloco de madeira ou pedra encostar em outro ele adiciona em outro lugar 
-    colisao_p_m = pygame.sprite.groupcollide(all_bricks, all_woods, True, True)
+   # colisao_p_m = pygame.sprite.groupcollide(all_bricks, all_woods, True, True)
     
-    for p in colisao_p_m:
-        p = brick(brick_img)
-        all_sprites.add(p)
-        all_bricks.add(p)
-    
-    for m in colisao_p_m:
-        m = wood(wood_img)
-        all_sprites.add(m)
-        all_woods.add(m)
+   # for p in colisao_p_m:
+     #   p = brick(brick_img)
+      #  all_sprites.add(p)
+      #  all_bricks.add(p)
+    #
+#for m in colisao_p_m:
+      #  m = wood(wood_img)
+#all_sprites.add(m)
+      #  all_woods.add(m)
 
     # colisao_m_m =  pygame.sprite.groupcollide(all_woods, all_woods, True, False)
     
