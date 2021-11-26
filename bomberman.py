@@ -37,6 +37,8 @@ BRICK_WIDTH=50
 BRICK_HEIGHT=50
 WOOD_WIDTH=50
 WOOD_HEIGHT=50
+BOMB_WIDTH=90
+BOMB_HEIGHT=90
 font = pygame.font.SysFont(None, 48)
 boneco_img = pygame.image.load('assets/hulk.png').convert_alpha()
 boneco_img = pygame.transform.scale(boneco_img, (BONECO_WIDTH, BONECO_HEIGHT))
@@ -46,7 +48,8 @@ brick_img = pygame.image.load('assets/bricks.png').convert_alpha()
 brick_img = pygame.transform.scale(brick_img, (BRICK_WIDTH, BRICK_HEIGHT)) 
 wood_img = pygame.image.load('assets/wood.png').convert_alpha()
 wood_img = pygame.transform.scale(wood_img, (WOOD_WIDTH, WOOD_HEIGHT))
-
+bomb_img=pygame.image.load('assets/bomb.png').convert_alpha()
+bomb_img = pygame.transform.scale(bomb_img, (BOMB_WIDTH, BOMB_HEIGHT))
 
 # ----- Inicia estruturas de dados
 # Definindo os novos tipos
@@ -75,7 +78,7 @@ class wood(pygame.sprite.Sprite):
 
 
 class Player1(pygame.sprite.Sprite):
-    def __init__(self, img):
+    def __init__(self, img, all_sprites, all_bombs, bomb_img):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
@@ -85,6 +88,10 @@ class Player1(pygame.sprite.Sprite):
         self.rect.bottom = HEIGHT - 50
         self.speedx = 0
         self.speedy = 0
+        self.all_sprites = all_sprites
+        self.all_bombs = all_bombs
+        self.bomb_img = bomb_img
+
 
     def update(self):
         # Atualização da posição do boneco
@@ -100,8 +107,17 @@ class Player1(pygame.sprite.Sprite):
             self.rect.top = 50
         if self.rect.bottom > HEIGHT - 50:
             self.rect.bottom = HEIGHT -50
+    
+    
+    def shoot(self):
+        # A nova bala vai ser criada logo acima e no centro horizontal da nave
+        new_bomb = Bomb(self.bomb_img, self.rect.bottom+17, self.rect.centerx+2)
+        self.all_sprites.add(new_bomb)
+        self.all_bombs.add(new_bomb)
+
+
 class Player2(pygame.sprite.Sprite):
-    def __init__(self, img):
+    def __init__(self, img, all_sprites, all_bombs, bomb_img):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
@@ -111,6 +127,9 @@ class Player2(pygame.sprite.Sprite):
         self.rect.bottom =  100
         self.speedx = 0
         self.speedy = 0
+        self.all_sprites = all_sprites
+        self.all_bombs = all_bombs
+        self.bomb_img = bomb_img
 
     def update(self):
         # Atualização da posição do boneco
@@ -126,7 +145,26 @@ class Player2(pygame.sprite.Sprite):
             self.rect.top = 50
         if self.rect.bottom > HEIGHT - 50:
             self.rect.bottom = HEIGHT - 50
+        
+    def shoot(self):
+        # A nova bala vai ser criada logo acima e no centro horizontal da nave
+        new_bomb = Bomb(self.bomb_img, self.rect.bottom+17, self.rect.centerx+2)
+        self.all_sprites.add(new_bomb)
+        self.all_bombs.add(new_bomb)
 
+class Bomb(pygame.sprite.Sprite):
+    # Construtor da classe.
+    def __init__(self, img, bottom, centerx):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = img
+        self.rect = self.image.get_rect()
+
+        # Coloca no lugar inicial definido em x, y do constutor
+        self.rect.centerx = centerx
+        self.rect.bottom = bottom
+        self.speedy = 0  
 
 game = True
 # Variável para o ajuste de velocidade
@@ -154,10 +192,11 @@ for l in range (len(LAYOUT)):
 
 # Criando um grupo de sprites
 all_sprites = pygame.sprite.Group()
+all_bombs = pygame.sprite.Group()
 # Criando o jogador
 
-player1 = Player1(boneco_img)
-player2 = Player2(boneco1_img)
+player1 = Player1(boneco_img, all_sprites, all_bombs, bomb_img)
+player2 = Player2(boneco1_img,all_sprites, all_bombs, bomb_img)
 all_sprites.add(player1)
 all_sprites.add(player2)
 all_sprites.add(all_bricks)
@@ -179,6 +218,8 @@ while game:
                 player1.speedx -= 3
             if event.key == pygame.K_RIGHT:
                 player1.speedx += 3
+            if event.key == pygame.K_KP5:
+                player1.shoot()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 player1.speedx = 0
@@ -203,6 +244,8 @@ while game:
                 player2.speedx -= 3
             if event.key == pygame.K_d:
                 player2.speedx += 3
+            if event.key == pygame.K_SPACE:
+                player2.shoot()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 player2.speedx = 0
@@ -225,6 +268,7 @@ while game:
     # ----- Atualiza estado do jogo
     # Atualizando a posição das sprites
     all_sprites.update()
+    
 
     # colisão bloco e personagem
 
