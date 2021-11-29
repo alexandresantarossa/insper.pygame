@@ -18,7 +18,7 @@ pygame.display.set_caption('Bombinha')
 # ----- Inicia assets
 LAYOUT = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,1,1],
-    [1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 6 ,1],
+    [1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1,6,1,],
     [1, -1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,-1,1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,1],
     [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,0,1],
@@ -92,7 +92,7 @@ class Player1(pygame.sprite.Sprite):
         self.x = x
         self.y = y
 
-        print('aqui',self.rect.x,self.rect.y)
+    
 
 
 
@@ -117,8 +117,8 @@ class Player2(pygame.sprite.Sprite):
 
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.x = x*BONECO_WIDTH
-        self.rect.y = y*BONECO_HEIGHT
+        self.rect.x = x*BRICK_WIDTH
+        self.rect.y = y*BRICK_HEIGHT
         self.all_sprites = all_sprites
         self.all_bombs = all_bombs
         self.bomb_img = bomb_img
@@ -128,8 +128,8 @@ class Player2(pygame.sprite.Sprite):
 
     def update(self):
         # Atualização da posição do boneco
-        self.rect.x = self.x*BONECO_WIDTH
-        self.rect.y = self.y*BONECO_HEIGHT
+        self.rect.x = self.x*BRICK_WIDTH
+        self.rect.y = self.y*BRICK_HEIGHT
 
        
         
@@ -172,9 +172,11 @@ all_blocks = pygame.sprite.Group()
 for l in range (len(LAYOUT)):
     for c in range (len(LAYOUT[l])):
         item = LAYOUT[l][c]
+        
         if item == 1:
             pedra = brick(brick_img,c,l)
             all_bricks.add(pedra)
+        
         if item == 0:
             r= random.randint(2,4)
             if r ==3 or r==4:
@@ -221,22 +223,47 @@ while game:
             game = False
         # Verifica se apertou alguma tecla.
         if event.type == pygame.KEYDOWN:    
-            # Dependendo da tecla, altera a velocidade.
+            # AÇÕES PLAYER 1
+           
             if event.key == pygame.K_LEFT:
                 if LAYOUT[player1.y][player1.x - 1] in[0,-1] :
                     player1.x -= 1 
+           
             if event.key == pygame.K_RIGHT: 
                 if LAYOUT[player1.y][player1.x + 1] in[0,-1]:
                     player1.x += 1 
+           
             if event.key == pygame.K_UP:
                 if LAYOUT[player1.y - 1][player1.x] in[0,-1]:
                     player1.y -=1
+            
             if event.key == pygame.K_DOWN:
                 if LAYOUT[player1.y + 1][player1.x] in[0,-1]:
                     player1.y +=1
                 
             if event.key == pygame.K_KP5:
                 player1.shoot()
+            
+            #AÇÕES PLAYER 2
+
+            if event.key == pygame.K_a:
+                if LAYOUT[player2.y][player2.x - 1] in[0,-1] :
+                    player2.x -= 1 
+            
+            if event.key == pygame.K_d: 
+                if LAYOUT[player2.y][player2.x + 1] in[0,-1]:
+                    player2.x += 1 
+            
+            if event.key == pygame.K_w:
+                if LAYOUT[player2.y - 1][player2.x] in[0,-1]:
+                    player2.y -=1
+            
+            if event.key == pygame.K_s:
+                if LAYOUT[player2.y + 1][player2.x] in[0,-1]:
+                    player2.y +=1
+                
+            if event.key == pygame.K_SPACE:
+                player2.shoot()
      
   
 
