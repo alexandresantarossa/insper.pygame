@@ -270,9 +270,91 @@ while game:
     all_sprites.update()
     
 
-    # colisão bloco e personagem
+    # colisão bloco e personagem 1 
 
-    hits = pygame.sprite.spritecollide(player1, all_bricks, False)
+    p1_hits_1 = pygame.sprite.spritecollide(player1, all_bricks,False)
+    
+    if len(p1_hits_1) > 0 and event.key == pygame.K_RIGHT:
+            player1.speedx = 0
+            
+           
+
+    if len(p1_hits_1) > 0 and event.key == pygame.K_LEFT:
+            player1.speedx = 0
+           
+            
+
+    if len(p1_hits_1) > 0 and event.key == pygame.K_UP:
+            player1.speedy = 0
+            
+            
+
+    if len(p1_hits_1) > 0 and event.key == pygame.K_DOWN:
+            player1.speedy = 0
+                
+
+    # colisão madeira e personagem 1
+
+    p1_hits_2 = pygame.sprite.spritecollide(player1, all_woods,False)
+    
+    if len(p1_hits_2) > 0 and event.key == pygame.K_RIGHT:
+            player1.speedx = 0
+            
+
+    if len(p1_hits_2) > 0 and event.key == pygame.K_LEFT:
+            player1.speedx = 0
+            
+
+    if len(p1_hits_2) > 0 and event.key == pygame.K_UP:
+            player1.speedy = 0
+            
+
+    if len(p1_hits_2) > 0 and event.key == pygame.K_DOWN:
+            player1.speedy = 0
+
+    # colisão bloco e personagem 2
+
+    p2_hits_1 = pygame.sprite.spritecollide(player2, all_bricks,False)
+
+    if len(p2_hits_1) > 0 and event.key == pygame.K_d:
+            player2.speedx = 0
+            
+           
+
+    if len(p2_hits_1) > 0 and event.key == pygame.K_a:
+            player2.speedx = 0
+           
+            
+
+    if len(p2_hits_1) > 0 and event.key == pygame.K_w:
+            player2.speedy = 0
+            
+            
+
+    if len(p2_hits_1) > 0 and event.key == pygame.K_s:
+            player2.speedy = 0
+
+    # colisão madeira e personagem 2
+
+    p2_hits_2 = pygame.sprite.spritecollide(player2, all_woods,False)
+    
+    if len(p2_hits_2) > 0 and event.key == pygame.K_d:
+            player2.speedx = 0
+            
+
+    if len(p2_hits_2) > 0 and event.key == pygame.K_a:
+            player2.speedx = 0
+            
+
+    if len(p2_hits_2) > 0 and event.key == pygame.K_w:
+            player2.speedy = 0
+            
+
+    if len(p2_hits_2) > 0 and event.key == pygame.K_s:
+            player2.speedy = 0
+
+
+
     
     
 
