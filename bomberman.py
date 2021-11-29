@@ -159,16 +159,17 @@ game = True
 # Variável para o ajuste de velocidade
 clock = pygame.time.Clock()
 FPS = 30
+
 # Criando um grupo de blocos 
 all_woods = pygame.sprite.Group()
 all_bricks = pygame.sprite.Group()
+
 # Criando um grupo de sprites
 all_sprites = pygame.sprite.Group()
 all_bombs = pygame.sprite.Group()
 all_blocks = pygame.sprite.Group()
 
 # Criando os blocos
-
 for l in range (len(LAYOUT)):
     for c in range (len(LAYOUT[l])):
         item = LAYOUT[l][c]
@@ -196,15 +197,7 @@ for l in range (len(LAYOUT)):
              LAYOUT[l][c] =0
              player2 = Player2(boneco1_img,all_sprites, all_bombs, bomb_img,c,l)
             
-
-# # Criando um grupo de sprites
-# all_sprites = pygame.sprite.Group()
-# all_bombs = pygame.sprite.Group()
-# all_blocks = pygame.sprite.Group()
-# Criando o jogador
-
-# player1 = Player1(boneco_img, all_sprites, all_bombs, bomb_img)
-# player2 = Player2(boneco1_img,all_sprites, all_bombs, bomb_img)
+# adicionando aos grupos de sprites
 all_sprites.add(player1)
 all_sprites.add(player2)
 all_sprites.add(all_bricks)
