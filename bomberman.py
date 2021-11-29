@@ -18,7 +18,7 @@ pygame.display.set_caption('Bombinha')
 # ----- Inicia assets
 LAYOUT = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,1,1],
-    [1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,-1,1],
+    [1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 6 ,1],
     [1, -1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,-1,1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,1],
     [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,0,1],
@@ -27,8 +27,8 @@ LAYOUT = [
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,1],
     [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,0,1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,1],
-    [1, -1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,-1,1],
-    [1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,-1,1],
+    [1, -1 , 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,-1,1],
+    [1, 5, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,-1,1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,1,1],
         ]
 BONECO_WIDTH = 45
@@ -72,41 +72,35 @@ class wood(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x*WOOD_WIDTH
         self.rect.y = y*WOOD_HEIGHT
-        print(self.rect.x,self.rect.y)
-
+       
 
 
 
 class Player1(pygame.sprite.Sprite):
-    def __init__(self, img, all_sprites, all_bombs, bomb_img):
+    def __init__(self, img, all_sprites, all_bombs, bomb_img,x,y):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.centerx = 75
-        self.rect.bottom = HEIGHT - 50
-        self.speedx = 0
-        self.speedy = 0
+        self.rect.x = x*BRICK_WIDTH
+        self.rect.y = y*BRICK_HEIGHT
         self.all_sprites = all_sprites
         self.all_bombs = all_bombs
         self.bomb_img = bomb_img
+        
+        self.x = x
+        self.y = y
+
+        print('aqui',self.rect.x,self.rect.y)
+
 
 
     def update(self):
         # Atualização da posição do boneco
-        self.rect.x += self.speedx
-        self.rect.y += self.speedy
+        self.rect.x = self.x*BRICK_WIDTH
+        self.rect.y = self.y*BRICK_HEIGHT
 
-        # Mantem dentro da tela
-        if self.rect.right > WIDTH - 50:
-            self.rect.right = WIDTH -50
-        if self.rect.left < 50:
-            self.rect.left = 50
-        if self.rect.top < 50:
-            self.rect.top = 50
-        if self.rect.bottom > HEIGHT - 50:
-            self.rect.bottom = HEIGHT -50
     
     
     def shoot(self):
@@ -117,34 +111,28 @@ class Player1(pygame.sprite.Sprite):
 
 
 class Player2(pygame.sprite.Sprite):
-    def __init__(self, img, all_sprites, all_bombs, bomb_img):
+    def __init__(self, img, all_sprites, all_bombs, bomb_img,x,y):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
 
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.centerx = 675
-        self.rect.bottom =  100
-        self.speedx = 0
-        self.speedy = 0
+        self.rect.x = x*BONECO_WIDTH
+        self.rect.y = y*BONECO_HEIGHT
         self.all_sprites = all_sprites
         self.all_bombs = all_bombs
         self.bomb_img = bomb_img
 
+        self.x = x
+        self.y = y 
+
     def update(self):
         # Atualização da posição do boneco
-        self.rect.x += self.speedx
-        self.rect.y += self.speedy
+        self.rect.x = self.x*BONECO_WIDTH
+        self.rect.y = self.y*BONECO_HEIGHT
 
-        # Mantem dentro da tela
-        if self.rect.right > WIDTH - 50:
-            self.rect.right = WIDTH - 50
-        if self.rect.left < 50:
-            self.rect.left = 50
-        if self.rect.top < 50:
-            self.rect.top = 50
-        if self.rect.bottom > HEIGHT - 50:
-            self.rect.bottom = HEIGHT - 50
+       
+        
         
     def shoot(self):
         # A nova bala vai ser criada logo acima e no centro horizontal da nave
@@ -165,6 +153,7 @@ class Bomb(pygame.sprite.Sprite):
         self.rect.centerx = centerx
         self.rect.bottom = bottom
         self.speedy = 0  
+        self.speedx = 0 
 
 game = True
 # Variável para o ajuste de velocidade
@@ -173,6 +162,11 @@ FPS = 30
 # Criando um grupo de blocos 
 all_woods = pygame.sprite.Group()
 all_bricks = pygame.sprite.Group()
+# Criando um grupo de sprites
+all_sprites = pygame.sprite.Group()
+all_bombs = pygame.sprite.Group()
+all_blocks = pygame.sprite.Group()
+
 # Criando os blocos
 
 for l in range (len(LAYOUT)):
@@ -182,25 +176,39 @@ for l in range (len(LAYOUT)):
             pedra = brick(brick_img,c,l)
             all_bricks.add(pedra)
         if item == 0:
-            item= random.randint(2,4)
-            if item ==3 or item==4:
+            r= random.randint(2,4)
+            if r ==3 or r==4:
                 madeira =wood(wood_img,c,l)
                 all_woods.add(madeira)
+                LAYOUT[l][c] =1
             else:
-                item=0
+                LAYOUT[l][c] =0
 
+        if item == 5 :
 
-# Criando um grupo de sprites
-all_sprites = pygame.sprite.Group()
-all_bombs = pygame.sprite.Group()
+            LAYOUT[l][c] =0 
+            player1 = Player1(boneco_img, all_sprites, all_bombs, bomb_img,c,l)
+            
+        
+        if item == 6:
+             LAYOUT[l][c] =0
+             player2 = Player2(boneco1_img,all_sprites, all_bombs, bomb_img,c,l)
+            
+
+# # Criando um grupo de sprites
+# all_sprites = pygame.sprite.Group()
+# all_bombs = pygame.sprite.Group()
+# all_blocks = pygame.sprite.Group()
 # Criando o jogador
 
-player1 = Player1(boneco_img, all_sprites, all_bombs, bomb_img)
-player2 = Player2(boneco1_img,all_sprites, all_bombs, bomb_img)
+# player1 = Player1(boneco_img, all_sprites, all_bombs, bomb_img)
+# player2 = Player2(boneco1_img,all_sprites, all_bombs, bomb_img)
 all_sprites.add(player1)
 all_sprites.add(player2)
 all_sprites.add(all_bricks)
 all_sprites.add(all_woods)
+all_blocks.add(all_bricks)
+all_blocks.add(all_woods)
 
 # ===== Loop principal =====
 while game:
@@ -215,151 +223,29 @@ while game:
         if event.type == pygame.KEYDOWN:    
             # Dependendo da tecla, altera a velocidade.
             if event.key == pygame.K_LEFT:
-                player1.speedx -= 3
-            if event.key == pygame.K_RIGHT:
-                player1.speedx += 3
+                if LAYOUT[player1.y][player1.x - 1] in[0,-1] :
+                    player1.x -= 1 
+            if event.key == pygame.K_RIGHT: 
+                if LAYOUT[player1.y][player1.x + 1] in[0,-1]:
+                    player1.x += 1 
+            if event.key == pygame.K_UP:
+                if LAYOUT[player1.y - 1][player1.x] in[0,-1]:
+                    player1.y -=1
+            if event.key == pygame.K_DOWN:
+                if LAYOUT[player1.y + 1][player1.x] in[0,-1]:
+                    player1.y +=1
+                
             if event.key == pygame.K_KP5:
                 player1.shoot()
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
-                player1.speedx = 0
-            if event.key == pygame.K_RIGHT:
-                player1.speedx = 0            
-        # Verifica se apertou alguma tecla.
-        if event.type == pygame.KEYDOWN:    
-            # Dependendo da tecla, altera a velocidade.
-            if event.key == pygame.K_UP:
-                player1.speedy -= 3
-            if event.key == pygame.K_DOWN:
-                player1.speedy += 3
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_UP:
-                player1.speedy = 0
-            if event.key == pygame.K_DOWN:
-                player1.speedy = 0      
-        # Verifica se apertou alguma tecla.
-        if event.type == pygame.KEYDOWN:    
-            # Dependendo da tecla, altera a velocidade.
-            if event.key == pygame.K_a:
-                player2.speedx -= 3
-            if event.key == pygame.K_d:
-                player2.speedx += 3
-            if event.key == pygame.K_SPACE:
-                player2.shoot()
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_a:
-                player2.speedx = 0
-            if event.key == pygame.K_d:
-                player2.speedx = 0            
-        # Verifica se apertou alguma tecla.
-        if event.type == pygame.KEYDOWN:    
-            # Dependendo da tecla, altera a velocidade.
-            if event.key == pygame.K_w:
-                player2.speedy -= 3
-            if event.key == pygame.K_s:
-                player2.speedy += 3
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_w:
-                player2.speedy = 0
-            if event.key == pygame.K_s:
-                player2.speedy = 0                  
-
+     
+  
 
     # ----- Atualiza estado do jogo
     # Atualizando a posição das sprites
     all_sprites.update()
-    
-
-    # colisão bloco e personagem 1 
-
-    p1_hits_1 = pygame.sprite.spritecollide(player1, all_bricks,False)
-    
-    if len(p1_hits_1) > 0 and event.key == pygame.K_RIGHT:
-            player1.speedx = 0
-            
-           
-
-    if len(p1_hits_1) > 0 and event.key == pygame.K_LEFT:
-            player1.speedx = 0
-           
-            
-
-    if len(p1_hits_1) > 0 and event.key == pygame.K_UP:
-            player1.speedy = 0
-            
-            
-
-    if len(p1_hits_1) > 0 and event.key == pygame.K_DOWN:
-            player1.speedy = 0
-                
-
-    # colisão madeira e personagem 1
-
-    p1_hits_2 = pygame.sprite.spritecollide(player1, all_woods,False)
-    
-    if len(p1_hits_2) > 0 and event.key == pygame.K_RIGHT:
-            player1.speedx = 0
-            
-
-    if len(p1_hits_2) > 0 and event.key == pygame.K_LEFT:
-            player1.speedx = 0
-            
-
-    if len(p1_hits_2) > 0 and event.key == pygame.K_UP:
-            player1.speedy = 0
-            
-
-    if len(p1_hits_2) > 0 and event.key == pygame.K_DOWN:
-            player1.speedy = 0
-
-    # colisão bloco e personagem 2
-
-    p2_hits_1 = pygame.sprite.spritecollide(player2, all_bricks,False)
-
-    if len(p2_hits_1) > 0 and event.key == pygame.K_d:
-            player2.speedx = 0
-            
-           
-
-    if len(p2_hits_1) > 0 and event.key == pygame.K_a:
-            player2.speedx = 0
-           
-            
-
-    if len(p2_hits_1) > 0 and event.key == pygame.K_w:
-            player2.speedy = 0
-            
-            
-
-    if len(p2_hits_1) > 0 and event.key == pygame.K_s:
-            player2.speedy = 0
-
-    # colisão madeira e personagem 2
-
-    p2_hits_2 = pygame.sprite.spritecollide(player2, all_woods,False)
-    
-    if len(p2_hits_2) > 0 and event.key == pygame.K_d:
-            player2.speedx = 0
-            
-
-    if len(p2_hits_2) > 0 and event.key == pygame.K_a:
-            player2.speedx = 0
-            
-
-    if len(p2_hits_2) > 0 and event.key == pygame.K_w:
-            player2.speedy = 0
-            
-
-    if len(p2_hits_2) > 0 and event.key == pygame.K_s:
-            player2.speedy = 0
-
 
 
     
-    
-
-
-
 
     # ----- Gera saídas
     window.fill((0, 255, 100))  # Preenche com a cor verde
