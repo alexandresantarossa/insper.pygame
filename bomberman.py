@@ -2,7 +2,7 @@
 # ----- Importa e inicia pacotes
 import pygame
 import random
-
+import time
 pygame.init()
 
 #Toca o hino
@@ -234,7 +234,7 @@ while game:
                 if LAYOUT[player1.y + 1][player1.x] in[0,-1]:
                     player1.y +=1
                 
-            if event.key == pygame.K_KP5:
+            if event.key == pygame.K_RSHIFT:
                 player1.shoot()
             
             #AÇÕES PLAYER 2
