@@ -51,7 +51,8 @@ wood_img = pygame.image.load('assets/wood.png').convert_alpha()
 wood_img = pygame.transform.scale(wood_img, (WOOD_WIDTH, WOOD_HEIGHT))
 bomb_img=pygame.image.load('assets/bomb.png').convert_alpha()
 bomb_img = pygame.transform.scale(bomb_img, (BOMB_WIDTH, BOMB_HEIGHT))
-
+explosion_gif=pygame.image.load('assets/explosion.gif').convert_alpha()
+explosion = pygame.transform.scale(explosion_gif, (BOMB_WIDTH, BOMB_HEIGHT))
 # ----- Inicia estruturas de dados
 # Definindo os novos tipos
 class brick(pygame.sprite.Sprite):
