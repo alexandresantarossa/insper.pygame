@@ -120,7 +120,6 @@ def main_menu():
         pygame.display.update()
 
 # ----- Configura o jogo
-
 def game():
     game = True
     # ----- Inicia estruturas de dados
@@ -397,6 +396,7 @@ def game():
     # ===== Finalização =====
     pygame.quit()  # Função do PyGame que finaliza os recursos utilizados
 
+# ----- Configura as telas finais
 def win_p1():
     while True:
 
@@ -433,7 +433,6 @@ def win_p1():
                     click = True
 
         pygame.display.update()
-
 
 def win_p2():
     while True:
@@ -472,5 +471,5 @@ def win_p2():
 
         pygame.display.update()
 
-
+# ----- Abre o jogo
 main_menu()
