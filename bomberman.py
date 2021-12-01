@@ -6,8 +6,9 @@ import time
 pygame.init()
 
 #Toca o hino
-pygame.mixer.music.load('assets/matue.mp3')
-pygame.mixer.music.play(-1)
+musica =pygame.mixer.Sound('assets/matue.mp3')
+musica.set_volume(0.1)
+musica.play()
 
 # ----- Gera tela principal
 WIDTH = 750
