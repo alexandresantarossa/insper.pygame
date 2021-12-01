@@ -10,7 +10,7 @@ pygame.init()
 #Toca o hino
 musica =pygame.mixer.Sound('assets/matue.mp3')
 musica.set_volume(0.1)
-musica.play(-1)
+musica.play()
 
 # ----- Gera tela principal
 WIDTH = 750
@@ -43,8 +43,6 @@ WOOD_HEIGHT=50
 BOMB_WIDTH=90
 BOMB_HEIGHT=90
 
-
-
 font = pygame.font.SysFont(None, 48)
 title = pygame.font.SysFont(None,80)
 def draw_text(text, font, color, surface, x, y):
@@ -68,6 +66,7 @@ bonecobig_img = pygame.image.load('assets/hulk.png').convert_alpha()
 bonecobig_img = pygame.transform.scale(bonecobig_img, (300, 300))
 boneco1big_img = pygame.image.load('assets/chewbaca.png').convert_alpha()
 boneco1big_img = pygame.transform.scale(boneco1big_img, (300, 300))
+
 
 # ----- Configura a tela inicial
 click = False
@@ -120,6 +119,7 @@ def main_menu():
         pygame.display.update()
 
 # ----- Configura o jogo
+
 def game():
     game = True
     # ----- Inicia estruturas de dados
@@ -189,12 +189,17 @@ def game():
             elapsed_ticks = now - self.last_shot
 
             if elapsed_ticks > self.shoot_ticks:
+                
 
                 self.last_shot = now
 
-                new_bomb = Bomb(self.bomb_img, self.rect.bottom+17, self.rect.centerx+2)
+                new_bomb = Bomb(self.bomb_img, self.rect.bottom+17, self.rect.centerx+2, self.x, self.y)
                 self.all_sprites.add(new_bomb)
                 self.all_bombs.add(new_bomb)
+
+                
+
+    
 
     class Player2(pygame.sprite.Sprite):
         def __init__(self, img, all_sprites, all_bombs, bomb_img,x,y):
@@ -235,13 +240,13 @@ def game():
 
                 self.last_shot = now
 
-                new_bomb = Bomb(self.bomb_img, self.rect.bottom+17, self.rect.centerx+2)
+                new_bomb = Bomb(self.bomb_img, self.rect.bottom+17, self.rect.centerx+2, self.x, self.y)
                 self.all_sprites.add(new_bomb)
                 self.all_bombs.add(new_bomb)
 
     class Bomb(pygame.sprite.Sprite):
         # Construtor da classe.
-        def __init__(self, img, bottom, centerx):
+        def __init__(self, img, bottom, centerx,i,j):
             # Construtor da classe mãe (Sprite).
             pygame.sprite.Sprite.__init__(self)
 
@@ -251,15 +256,37 @@ def game():
             # Coloca no lugar inicial definido em x, y do constutor
             self.rect.centerx = centerx
             self.rect.bottom = bottom
-            self.tempo = 2900
+            self.tempo = 150
+
+            self.i = j
+            self.j = i
 
         def update(self):
             self.tempo -= 2 
+        
             if self.tempo <= 0:
+                #print('oi')
                 center = self.rect.center
-                self.rect.width *= 0.5 
-                self.rect.height *= 0.5 
+                self.rect.width *= 1 
+                self.rect.height *= 1 
                 self.rect.center = center
+
+                hits = pygame.sprite.groupcollide(all_bombs,all_woods,False,False)
+                for bomba, woods in hits.items():
+                    possiveis = [(self.i + 1, self.j), (self.i - 1, self.j), (self.i, self.j+ 1), (self.i, self.j - 1)]
+                    # self.kill()
+                    for wood in woods:
+                        #print(wood)
+                        # print((wood.y, wood.x))
+                        # print((self.i, self.j))
+                        if (wood.y, wood.x) in possiveis:
+                            print('oi')
+                            LAYOUT[wood.y][wood.x] = 0
+                            wood.kill()
+
+                self.kill()    
+                
+
 
 
     game = True
@@ -371,18 +398,17 @@ def game():
         # Atualizando a posição das sprites
         all_sprites.update()
 
-        hits = pygame.sprite.groupcollide(all_bombs,all_woods,False,False)
+        # hits = pygame.sprite.groupcollide(all_bombs,all_woods,False,False)
         
-        for bomba, woods in hits.items():
+        # for bomba, woods in hits.items():
+            
+        #         bomba.kill()
+        #         for wood in woods:
 
-            bomba.kill()
+        #             LAYOUT[wood.y][wood.x] = 0
 
+        #             wood.kill()
 
-            for wood in woods:
-
-                LAYOUT[wood.y][wood.x] = 0
-
-                wood.kill()
 
         
 
@@ -396,7 +422,7 @@ def game():
     # ===== Finalização =====
     pygame.quit()  # Função do PyGame que finaliza os recursos utilizados
 
-# ----- Configura as telas finais
+    # ----- Configura as telas finais
 def win_p1():
     while True:
 
