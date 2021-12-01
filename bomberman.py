@@ -93,6 +93,11 @@ class Player1(pygame.sprite.Sprite):
         self.x = x
         self.y = y
 
+        #condicoes de tempo para soltar a bomba
+        self.last_update = pygame.time.get_ticks()
+        self.frame_ticks = 10
+        self.last_shot = pygame.time.get_ticks()
+        self.shoot_ticks = 3000
     
 
 
@@ -106,10 +111,17 @@ class Player1(pygame.sprite.Sprite):
     
     def shoot(self):
         # A nova bala vai ser criada logo acima e no centro horizontal da nave
-        new_bomb = Bomb(self.bomb_img, self.rect.bottom+17, self.rect.centerx+2)
-        self.all_sprites.add(new_bomb)
-        self.all_bombs.add(new_bomb)
+        now = pygame.time.get_ticks()
 
+        elapsed_ticks = now - self.last_shot
+
+        if elapsed_ticks > self.shoot_ticks:
+
+            self.last_shot = now
+
+            new_bomb = Bomb(self.bomb_img, self.rect.bottom+17, self.rect.centerx+2)
+            self.all_sprites.add(new_bomb)
+            self.all_bombs.add(new_bomb)
 
 class Player2(pygame.sprite.Sprite):
     def __init__(self, img, all_sprites, all_bombs, bomb_img,x,y):
@@ -127,19 +139,32 @@ class Player2(pygame.sprite.Sprite):
         self.x = x
         self.y = y 
 
+        #condicoes de tempo bomba
+        self.last_update = pygame.time.get_ticks()
+        self.frame_ticks = 10
+        self.last_shot = pygame.time.get_ticks()
+        self.shoot_ticks = 3000
+
     def update(self):
         # Atualização da posição do boneco
         self.rect.x = self.x*BRICK_WIDTH
         self.rect.y = self.y*BRICK_HEIGHT
 
-       
-        
+
         
     def shoot(self):
         # A nova bala vai ser criada logo acima e no centro horizontal da nave
-        new_bomb = Bomb(self.bomb_img, self.rect.bottom+17, self.rect.centerx+2)
-        self.all_sprites.add(new_bomb)
-        self.all_bombs.add(new_bomb)
+        now = pygame.time.get_ticks()
+
+        elapsed_ticks = now - self.last_shot
+
+        if elapsed_ticks > self.shoot_ticks:
+
+            self.last_shot = now
+
+            new_bomb = Bomb(self.bomb_img, self.rect.bottom+17, self.rect.centerx+2)
+            self.all_sprites.add(new_bomb)
+            self.all_bombs.add(new_bomb)
 
 class Bomb(pygame.sprite.Sprite):
     # Construtor da classe.
