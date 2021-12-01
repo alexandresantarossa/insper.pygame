@@ -231,7 +231,7 @@ def game():
 
             
         def shoot(self):
-            # A nova bala vai ser criada logo acima e no centro horizontal da nave
+            # A nova bomba vai nascer em cima do jogador 
             now = pygame.time.get_ticks()
 
             elapsed_ticks = now - self.last_shot
@@ -265,7 +265,7 @@ def game():
             self.tempo -= 2 
         
             if self.tempo <= 0:
-                #print('oi')
+                
                 center = self.rect.center
                 self.rect.width *= 1 
                 self.rect.height *= 1 
@@ -276,6 +276,7 @@ def game():
                     possiveis = [(self.i + 1, self.j), (self.i - 1, self.j), (self.i, self.j+ 1), (self.i, self.j - 1)]
                     # self.kill()
                     for wood in woods:
+                        #os comentarios abaixo foram feitos para nos ajudar a achar o erro na mariz(invertemos linha e coluna), caso queira ver tambem
                         #print(wood)
                         # print((wood.y, wood.x))
                         # print((self.i, self.j))
