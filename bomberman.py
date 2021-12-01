@@ -10,7 +10,7 @@ pygame.init()
 #Toca o hino
 musica =pygame.mixer.Sound('assets/matue.mp3')
 musica.set_volume(0.1)
-musica.play()
+musica.play(-1)
 
 # ----- Gera tela principal
 WIDTH = 750
@@ -43,6 +43,8 @@ WOOD_HEIGHT=50
 BOMB_WIDTH=90
 BOMB_HEIGHT=90
 
+
+
 font = pygame.font.SysFont(None, 48)
 title = pygame.font.SysFont(None,80)
 def draw_text(text, font, color, surface, x, y):
@@ -62,6 +64,10 @@ wood_img = pygame.image.load('assets/wood.png').convert_alpha()
 wood_img = pygame.transform.scale(wood_img, (WOOD_WIDTH, WOOD_HEIGHT))
 bomb_img=pygame.image.load('assets/bomb.png').convert_alpha()
 bomb_img = pygame.transform.scale(bomb_img, (BOMB_WIDTH, BOMB_HEIGHT))
+bonecobig_img = pygame.image.load('assets/hulk.png').convert_alpha()
+bonecobig_img = pygame.transform.scale(bonecobig_img, (300, 300))
+boneco1big_img = pygame.image.load('assets/chewbaca.png').convert_alpha()
+boneco1big_img = pygame.transform.scale(boneco1big_img, (300, 300))
 
 # ----- Configura a tela inicial
 click = False
@@ -379,7 +385,6 @@ def game():
 
                 wood.kill()
 
-
         
 
         # ----- Gera saídas
@@ -391,5 +396,81 @@ def game():
 
     # ===== Finalização =====
     pygame.quit()  # Função do PyGame que finaliza os recursos utilizados
+
+def win_p1():
+    while True:
+
+        window.fill((0, 255, 100))
+        draw_text('O JOGADOR 1 VENCEU!', title, (0, 0, 0), window, 50, 100)
+        window.blit(bonecobig_img, (200, 300))
+
+        mx, my = pygame.mouse.get_pos()
+
+        button_1 = pygame.Rect(20, 200, 320, 50)
+        button_2 = pygame.Rect(400, 200, 320, 50)
+
+
+        if button_1.collidepoint((mx, my)):
+            if click:
+                game()
+        if button_2.collidepoint((mx, my)):
+            if click:
+                pygame.QUIT()
+        pygame.draw.rect(window, (255, 0, 0), button_1)
+        pygame.draw.rect(window, (255, 0, 0), button_2)
+        draw_text('JOGAR DE NOVO?', font, (0, 0, 0), window, 30, 210)
+        draw_text('SAIR', font, (0, 0, 0), window, 520, 210)
+
+        click = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        pygame.display.update()
+
+
+def win_p2():
+    while True:
+
+        window.fill((0, 255, 100))
+        draw_text('O JOGADOR 2 VENCEU!', title, (0, 0, 0), window, 50, 100)
+        window.blit(boneco1big_img, (200, 300))
+
+        mx, my = pygame.mouse.get_pos()
+
+        button_1 = pygame.Rect(20, 200, 320, 50)
+        button_2 = pygame.Rect(400, 200, 320, 50)
+
+
+        if button_1.collidepoint((mx, my)):
+            if click:
+                game()
+        if button_2.collidepoint((mx, my)):
+            if click:
+                pygame.QUIT()
+        pygame.draw.rect(window, (255, 0, 0), button_1)
+        pygame.draw.rect(window, (255, 0, 0), button_2)
+        draw_text('JOGAR DE NOVO?', font, (0, 0, 0), window, 30, 210)
+        draw_text('SAIR', font, (0, 0, 0), window, 520, 210)
+
+        click = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        pygame.display.update()
+
 
 main_menu()
