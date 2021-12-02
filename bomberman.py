@@ -291,7 +291,7 @@ def game():
                 kill = pygame.sprite.groupcollide(all_bombs,all_players,False,False)
         
                 for bomba,players in kill.items():
-                    possiveis = [(self.i + 1, self.j), (self.i - 1, self.j), (self.i, self.j+ 1), (self.i, self.j - 1), (self.i ,self.j)]
+                    possiveis = [(self.i + 1, self.j), (self.i - 1, self.j), (self.i, self.j+ 1), (self.i, self.j - 1),(self.i,self.j)]
 
                     for player in players: 
                             if (player.y,player.x) in possiveis:
@@ -301,7 +301,7 @@ def game():
                                 if player == player2:
                                     win_p1()
 
-                            player.kill()
+                                player.kill()
                 
                 self.kill()
 
