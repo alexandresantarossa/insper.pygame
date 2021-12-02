@@ -52,9 +52,9 @@ def draw_text(text, font, color, surface, x, y):
     surface.blit(textobj, textrect)
 
 
-boneco_img = pygame.image.load('assets/hulk.png').convert_alpha()
-boneco_img = pygame.transform.scale(boneco_img, (BONECO_WIDTH, BONECO_HEIGHT))
-boneco1_img = pygame.image.load('assets/chewbaca.png').convert_alpha()
+boneco_img = pygame.image.load('assets/hulk verde.png').convert_alpha()
+boneco_img = pygame.transform.scale(boneco_img, (BONECO_WIDTH, 45))
+boneco1_img = pygame.image.load('assets/hulk.png').convert_alpha()
 boneco1_img = pygame.transform.scale(boneco1_img, (BONECO_WIDTH, BONECO_HEIGHT))
 brick_img = pygame.image.load('assets/bricks.png').convert_alpha()
 brick_img = pygame.transform.scale(brick_img, (BRICK_WIDTH, BRICK_HEIGHT)) 
@@ -62,11 +62,14 @@ wood_img = pygame.image.load('assets/wood.png').convert_alpha()
 wood_img = pygame.transform.scale(wood_img, (WOOD_WIDTH, WOOD_HEIGHT))
 bomb_img=pygame.image.load('assets/bomb.png').convert_alpha()
 bomb_img = pygame.transform.scale(bomb_img, (BOMB_WIDTH, BOMB_HEIGHT))
-bonecobig_img = pygame.image.load('assets/hulk.png').convert_alpha()
+bonecobig_img = pygame.image.load('assets/hulk verde.png').convert_alpha()
 bonecobig_img = pygame.transform.scale(bonecobig_img, (300, 300))
-boneco1big_img = pygame.image.load('assets/chewbaca.png').convert_alpha()
+boneco1big_img = pygame.image.load('assets/hulk.png').convert_alpha()
 boneco1big_img = pygame.transform.scale(boneco1big_img, (300, 300))
-
+sand_img = pygame.image.load('assets/sand.png').convert_alpha()
+sand_img = pygame.transform.scale(sand_img, (750, 650))
+bg_img = pygame.image.load('assets/bg.jpeg').convert_alpha()
+bg_img = pygame.transform.scale(bg_img, (750, 650))
 
 # ----- Configura a tela inicial
 click = False
@@ -75,17 +78,18 @@ def main_menu():
     while True:
 
         window.fill((0, 255, 100))
-        window.blit(bomb_img, (160,80))
-        draw_text('Bombinha', title, (0, 0, 0), window, 235, 100)
-        window.blit(bomb_img, (500,80))
+        window.blit(bg_img, (0,0))
+        window.blit(boneco1_img, (140,80))
+        window.blit(boneco_img, (530,80))
+        draw_text('Bomber Smash', title, (255, 255, 255), window, 155, 100)
 
-        draw_text('CONTROLES P1', font, (0, 0, 0), window, 10, 175)
-        draw_text('SETAS', font, (0, 0, 0), window, 10, 260)
-        draw_text('BOMBA: SHIFT', font, (0, 0, 0), window, 10, 300)
+        draw_text('CONTROLES P1', font, (255, 255, 255), window, 10, 175)
+        draw_text('SETAS', font, (255, 255, 255), window, 10, 260)
+        draw_text('BOMBA: SHIFT', font, (255, 255, 255), window, 10, 300)
 
-        draw_text('CONTROLES P2', font, (0, 0, 0), window, 450, 175)
-        draw_text('WASD', font, (0, 0, 0), window, 450, 260)
-        draw_text('BOMBA: ESPAÇO', font, (0, 0, 0), window, 450, 300)
+        draw_text('CONTROLES P2', font, (255, 255, 255), window, 450, 175)
+        draw_text('WASD', font, (255, 255, 255), window, 450, 260)
+        draw_text('BOMBA: ESPAÇO', font, (255, 255, 255), window, 450, 300)
 
 
         mx, my = pygame.mouse.get_pos()
@@ -311,7 +315,6 @@ def game():
                 
 
 
-
     game = True
     # Variável para o ajuste de velocidade
     clock = pygame.time.Clock()
@@ -429,6 +432,10 @@ def game():
 
         # ----- Gera saídas
         window.fill((0, 255, 100))  # Preenche com a cor verde
+
+        window.blit(sand_img,(0,0))
+
+
         # Desenhando sprites
         all_sprites.draw(window)
 
@@ -442,7 +449,9 @@ def win_p1():
     while True:
 
         window.fill((0, 255, 100))
-        draw_text('O JOGADOR 1 VENCEU!', title, (0, 0, 0), window, 50, 100)
+        window.blit(bg_img, (0,0))
+
+        draw_text('O JOGADOR 1 VENCEU!', title, (255, 255, 255), window, 50, 100)
         window.blit(bonecobig_img, (200, 300))
 
         mx, my = pygame.mouse.get_pos()
@@ -479,7 +488,9 @@ def win_p2():
     while True:
 
         window.fill((0, 255, 100))
-        draw_text('O JOGADOR 2 VENCEU!', title, (0, 0, 0), window, 50, 100)
+        window.blit(bg_img, (0,0))
+
+        draw_text('O JOGADOR 2 VENCEU!', title, (255, 255, 255), window, 50, 100)
         window.blit(boneco1big_img, (200, 300))
 
         mx, my = pygame.mouse.get_pos()
