@@ -270,7 +270,7 @@ def game():
             # Coloca no lugar inicial definido em x, y do constutor
             self.rect.centerx = centerx
             self.rect.bottom = bottom
-            self.tempo = 250
+            self.tempo = 150
             self.expc=centerx
             self.expb=bottom
 
@@ -494,20 +494,14 @@ def win_p1():
 
         mx, my = pygame.mouse.get_pos()
 
-        button_1 = pygame.Rect(20, 200, 320, 50)
-        button_2 = pygame.Rect(400, 200, 320, 50)
+        button_1 = pygame.Rect(250, 200, 220, 40)
 
 
         if button_1.collidepoint((mx, my)):
             if click:
-                game()
-        if button_2.collidepoint((mx, my)):
-            if click:
                 pygame.QUIT()
         pygame.draw.rect(window, (255, 0, 0), button_1)
-        pygame.draw.rect(window, (255, 0, 0), button_2)
-        draw_text('JOGAR DE NOVO?', font, (0, 0, 0), window, 30, 210)
-        draw_text('SAIR', font, (0, 0, 0), window, 520, 210)
+        draw_text('SAIR', font, (0, 0, 0), window, 310, 210)
 
         click = False
         for event in pygame.event.get():
@@ -533,20 +527,14 @@ def win_p2():
 
         mx, my = pygame.mouse.get_pos()
 
-        button_1 = pygame.Rect(20, 200, 320, 50)
-        button_2 = pygame.Rect(400, 200, 320, 50)
 
+        button_1 = pygame.Rect(250, 200, 220, 40)
 
         if button_1.collidepoint((mx, my)):
             if click:
-                game()
-        if button_2.collidepoint((mx, my)):
-            if click:
                 pygame.QUIT()
         pygame.draw.rect(window, (255, 0, 0), button_1)
-        pygame.draw.rect(window, (255, 0, 0), button_2)
-        draw_text('JOGAR DE NOVO?', font, (0, 0, 0), window, 30, 210)
-        draw_text('SAIR', font, (0, 0, 0), window, 520, 210)
+        draw_text('SAIR', font, (0, 0, 0), window, 310, 210)
 
         click = False
         for event in pygame.event.get():
