@@ -271,21 +271,39 @@ def game():
                 self.rect.height *= 1 
                 self.rect.center = center
 
+                # explodindo as caixas 
+
                 hits = pygame.sprite.groupcollide(all_bombs,all_woods,False,False)
                 for bomba, woods in hits.items():
                     possiveis = [(self.i + 1, self.j), (self.i - 1, self.j), (self.i, self.j+ 1), (self.i, self.j - 1)]
                     # self.kill()
                     for wood in woods:
-                        #os comentarios abaixo foram feitos para nos ajudar a achar o erro na mariz(invertemos linha e coluna), caso queira ver tambem
+                        #os comentarios abaixo foram feitos para nos ajudar a achar o erro na matriz(invertemos linha e coluna), caso queira ver tambem
                         #print(wood)
                         # print((wood.y, wood.x))
                         # print((self.i, self.j))
                         if (wood.y, wood.x) in possiveis:
-                            print('oi')
+                
                             LAYOUT[wood.y][wood.x] = 0
                             wood.kill()
+   
+                # bomba colidindo com o jogador 
+                kill = pygame.sprite.groupcollide(all_bombs,all_players,False,False)
+        
+                for bomba,players in kill.items():
+                    possiveis = [(self.i + 1, self.j), (self.i - 1, self.j), (self.i, self.j+ 1), (self.i, self.j - 1), (self.i ,self.j)]
 
-                self.kill()    
+                    for player in players: 
+
+                            if (player.y,player.x) in possiveis:
+                                LAYOUT[player.y][player.x] = 0
+                                player.kill()
+                
+                self.kill()
+
+                                
+      
+
                 
 
 
@@ -303,6 +321,7 @@ def game():
     all_sprites = pygame.sprite.Group()
     all_bombs = pygame.sprite.Group()
     all_blocks = pygame.sprite.Group()
+    all_players = pygame.sprite.Group()
 
     # Criando os blocos
     for l in range (len(LAYOUT)):
@@ -339,6 +358,10 @@ def game():
     all_sprites.add(all_woods)
     all_blocks.add(all_bricks)
     all_blocks.add(all_woods)
+    all_players.add(player1)
+    all_players.add(player2)
+
+
 
     # ===== Loop principal =====
     while game:
@@ -399,19 +422,6 @@ def game():
         # Atualizando a posição das sprites
         all_sprites.update()
 
-        # hits = pygame.sprite.groupcollide(all_bombs,all_woods,False,False)
-        
-        # for bomba, woods in hits.items():
-            
-        #         bomba.kill()
-        #         for wood in woods:
-
-        #             LAYOUT[wood.y][wood.x] = 0
-
-        #             wood.kill()
-
-
-        
 
         # ----- Gera saídas
         window.fill((0, 255, 100))  # Preenche com a cor verde
