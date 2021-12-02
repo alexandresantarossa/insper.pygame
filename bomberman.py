@@ -7,7 +7,7 @@ from pygame.font import Font
 
 pygame.init()
 
-# ----- Toca e deine a músicaS
+# ----- Toca e define a músicaS
 musica =pygame.mixer.Sound('assets/matue.mp3')
 musica.set_volume(0.1)
 musica.play(-1)
@@ -19,9 +19,10 @@ explosao.set_volume(0.2)
 WIDTH = 750
 HEIGHT = 650
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Bombinha')
+pygame.display.set_caption('Bomber Smash')
 
 # ----- Inicia assets
+# Define o nosso mapa, onde 0 são espaços livres e 1 são tijolos, 5 e 6 são os jogadores
 LAYOUT = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,1,1],
     [1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1,6,1,],
@@ -38,7 +39,7 @@ LAYOUT = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,1,1],
         ]
 
-# ----- Toca a músicaS
+# ----- Define as constantes
 BONECO_WIDTH = 45
 BONECO_HEIGHT = 40
 BRICK_WIDTH=50
@@ -50,6 +51,7 @@ BOMB_HEIGHT=90
 EXP_WIDTH=100
 EXP_HEIGHT=100
 
+# ----- Configura a fonte
 font = pygame.font.SysFont(None, 48)
 title = pygame.font.SysFont(None,80)
 def draw_text(text, font, color, surface, x, y):
@@ -58,7 +60,7 @@ def draw_text(text, font, color, surface, x, y):
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
 
-
+# ----- Carrega e muda o tamanho das imagens
 boneco_img = pygame.image.load('assets/hulk verde.png').convert_alpha()
 boneco_img = pygame.transform.scale(boneco_img, (BONECO_WIDTH, 45))
 boneco1_img = pygame.image.load('assets/hulk.png').convert_alpha()
@@ -105,7 +107,7 @@ def main_menu():
         draw_text('WASD', font, (255, 255, 255), window, 450, 260)
         draw_text('BOMBA: ESPAÇO', font, (255, 255, 255), window, 450, 300)
 
-
+        # ----- Configura os botões clicáveis
         mx, my = pygame.mouse.get_pos()
 
         button_1 = pygame.Rect(275, 400, 200, 50)
@@ -184,7 +186,7 @@ def game():
             self.x = x
             self.y = y
 
-            #condicoes de tempo para soltar a bomba
+            #condicoes iniciais de tempo para soltar a bomba
             self.last_update = pygame.time.get_ticks()
             self.frame_ticks = 10
             self.last_shot = pygame.time.get_ticks()
@@ -201,7 +203,7 @@ def game():
         
         
         def shoot(self):
-            # A nova bala vai ser criada logo acima e no centro horizontal da nave
+            # A nova bomba vai ser criada logo acima do personagem com um cooldown de 3 segundos
             now = pygame.time.get_ticks()
 
             elapsed_ticks = now - self.last_shot
@@ -235,7 +237,7 @@ def game():
             self.x = x
             self.y = y 
 
-            #condicoes de tempo bomba
+            #condicoes iniciais de tempo da bomba
             self.last_update = pygame.time.get_ticks()
             self.frame_ticks = 10
             self.last_shot = pygame.time.get_ticks()
@@ -249,7 +251,7 @@ def game():
 
             
         def shoot(self):
-            # A nova bomba vai nascer em cima do jogador 
+            # A nova bomba vai ser criada logo acima do personagem com um cooldown de 3 segundos
             now = pygame.time.get_ticks()
 
             elapsed_ticks = now - self.last_shot
@@ -282,6 +284,7 @@ def game():
             self.i = j
             self.j = i
 
+        # Configura a animação da explosão da bomba
         def update(self):
             self.tempo -= 2 
 
@@ -322,7 +325,6 @@ def game():
                 self.rect.bottom = bottom
 
                 # explodindo as caixas 
-
                 hits = pygame.sprite.groupcollide(all_bombs,all_woods,False,False)
                 for bomba, woods in hits.items():
                     possiveis = [(self.i + 1, self.j), (self.i - 1, self.j), (self.i, self.j+ 1), (self.i, self.j - 1)]
@@ -337,7 +339,7 @@ def game():
                             LAYOUT[wood.y][wood.x] = 0
                             wood.kill()
    
-                # bomba colidindo com o jogador 
+                # bomba matando o jogador 
                 kill = pygame.sprite.groupcollide(all_bombs,all_players,False,False)
         
                 for bomba,players in kill.items():
@@ -376,7 +378,7 @@ def game():
     all_blocks = pygame.sprite.Group()
     all_players = pygame.sprite.Group()
 
-    # Criando os blocos
+    # Criando os blocos do mapa
     for l in range (len(LAYOUT)):
         for c in range (len(LAYOUT[l])):
             item = LAYOUT[l][c]
@@ -490,7 +492,7 @@ def game():
     # ===== Finalização =====
     pygame.quit()  # Função do PyGame que finaliza os recursos utilizados
 
-    # ----- Configura as telas finais
+# ----- Configura as telas finais de vitória de cada jogador
 def win_p1():
     while True:
 
@@ -502,14 +504,14 @@ def win_p1():
 
         mx, my = pygame.mouse.get_pos()
 
-        button_1 = pygame.Rect(250, 200, 220, 40)
+        button_1 = pygame.Rect(250, 200, 230, 40)
 
 
         if button_1.collidepoint((mx, my)):
             if click:
                 pygame.QUIT()
         pygame.draw.rect(window, (255, 0, 0), button_1)
-        draw_text('SAIR', font, (0, 0, 0), window, 310, 210)
+        draw_text('SAIR', font, (0, 0, 0), window, 330, 205)
 
         click = False
         for event in pygame.event.get():
@@ -536,13 +538,13 @@ def win_p2():
         mx, my = pygame.mouse.get_pos()
 
 
-        button_1 = pygame.Rect(250, 200, 220, 40)
+        button_1 = pygame.Rect(250, 200, 230, 40)
 
         if button_1.collidepoint((mx, my)):
             if click:
                 pygame.QUIT()
         pygame.draw.rect(window, (255, 0, 0), button_1)
-        draw_text('SAIR', font, (0, 0, 0), window, 310, 210)
+        draw_text('SAIR', font, (0, 0, 0), window, 330, 205)
 
         click = False
         for event in pygame.event.get():
