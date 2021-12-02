@@ -42,6 +42,8 @@ WOOD_WIDTH=50
 WOOD_HEIGHT=50
 BOMB_WIDTH=90
 BOMB_HEIGHT=90
+EXP_WIDTH=100
+EXP_HEIGHT=100
 
 font = pygame.font.SysFont(None, 48)
 title = pygame.font.SysFont(None,80)
@@ -70,6 +72,13 @@ sand_img = pygame.image.load('assets/sand.png').convert_alpha()
 sand_img = pygame.transform.scale(sand_img, (750, 650))
 bg_img = pygame.image.load('assets/bg.jpeg').convert_alpha()
 bg_img = pygame.transform.scale(bg_img, (750, 650))
+exp1_img=pygame.image.load('assets/exp1.png').convert_alpha()
+exp1_img = pygame.transform.scale(exp1_img, (EXP_WIDTH, EXP_HEIGHT))
+exp2_img=pygame.image.load('assets/exp2.png').convert_alpha()
+exp2_img = pygame.transform.scale(exp2_img, (EXP_WIDTH, EXP_HEIGHT))
+exp3_img=pygame.image.load('assets/exp3.png').convert_alpha()
+exp3_img = pygame.transform.scale(exp3_img, (EXP_WIDTH, EXP_HEIGHT))
+imagem=[bomb_img,exp1_img,exp2_img,exp3_img]
 
 # ----- Configura a tela inicial
 click = False
@@ -155,7 +164,7 @@ def game():
 
 
     class Player1(pygame.sprite.Sprite):
-        def __init__(self, img, all_sprites, all_bombs, bomb_img,x,y):
+        def __init__(self, img, all_sprites, all_bombs,x,y,imagem):
             # Construtor da classe mãe (Sprite).
             pygame.sprite.Sprite.__init__(self)
 
@@ -165,7 +174,7 @@ def game():
             self.rect.y = y*BRICK_HEIGHT
             self.all_sprites = all_sprites
             self.all_bombs = all_bombs
-            self.bomb_img = bomb_img
+            self.imagem = imagem
             
             self.x = x
             self.y = y
@@ -197,7 +206,7 @@ def game():
 
                 self.last_shot = now
 
-                new_bomb = Bomb(self.bomb_img, self.rect.bottom+17, self.rect.centerx+2, self.x, self.y)
+                new_bomb = Bomb(self.imagem, self.rect.bottom+17, self.rect.centerx+2, self.x, self.y)
                 self.all_sprites.add(new_bomb)
                 self.all_bombs.add(new_bomb)
 
@@ -206,7 +215,7 @@ def game():
     
 
     class Player2(pygame.sprite.Sprite):
-        def __init__(self, img, all_sprites, all_bombs, bomb_img,x,y):
+        def __init__(self, img, all_sprites, all_bombs,x,y,imagem):
             # Construtor da classe mãe (Sprite).
             pygame.sprite.Sprite.__init__(self)
 
@@ -216,7 +225,7 @@ def game():
             self.rect.y = y*BRICK_HEIGHT
             self.all_sprites = all_sprites
             self.all_bombs = all_bombs
-            self.bomb_img = bomb_img
+            self.imagem = imagem
 
             self.x = x
             self.y = y 
@@ -244,7 +253,7 @@ def game():
 
                 self.last_shot = now
 
-                new_bomb = Bomb(self.bomb_img, self.rect.bottom+17, self.rect.centerx+2, self.x, self.y)
+                new_bomb = Bomb(self.imagem, self.rect.bottom+17, self.rect.centerx+2, self.x, self.y)
                 self.all_sprites.add(new_bomb)
                 self.all_bombs.add(new_bomb)
 
@@ -254,26 +263,55 @@ def game():
             # Construtor da classe mãe (Sprite).
             pygame.sprite.Sprite.__init__(self)
 
-            self.image = img
+            self.image = img[0]
             self.rect = self.image.get_rect()
+            self.types=img
 
             # Coloca no lugar inicial definido em x, y do constutor
             self.rect.centerx = centerx
             self.rect.bottom = bottom
-            self.tempo = 150
+            self.tempo = 250
+            self.expc=centerx
+            self.expb=bottom
 
             self.i = j
             self.j = i
 
         def update(self):
             self.tempo -= 2 
-        
-            if self.tempo <= 0:
+            if self.tempo>30 and self.tempo<=40:
+                self.image=self.types[1]
+                centerx=self.expc
+                bottom=self.expb
+                self.rect.centerx = centerx
+                self.rect.bottom = bottom
+
+              
                 
-                center = self.rect.center
+                
+            if self.tempo<=30 and self.tempo>20:
+                self.image=self.types[2]
+                centerx=self.expc
+                bottom=self.expb
+                self.rect.centerx = centerx
+                self.rect.bottom = bottom
+               
+                
+            if self.tempo<=20 and self.tempo>10:
+                self.image=self.types[3]
+                centerx=self.expc
+                bottom=self.expb
+                self.rect.centerx = centerx
+                self.rect.bottom = bottom 
+        
+            if self.tempo <= 5:
+                
+                centerx =self.expc
+                bottom = self.expb
                 self.rect.width *= 1 
                 self.rect.height *= 1 
-                self.rect.center = center
+                self.rect.centerx = centerx
+                self.rect.bottom = bottom
 
                 # explodindo as caixas 
 
@@ -351,12 +389,12 @@ def game():
             if item == 5 :
 
                 LAYOUT[l][c] =0 
-                player1 = Player1(boneco_img, all_sprites, all_bombs, bomb_img,c,l)
+                player1 = Player1(boneco_img, all_sprites, all_bombs,c,l,imagem)
                 
             
             if item == 6:
                 LAYOUT[l][c] =0
-                player2 = Player2(boneco1_img,all_sprites, all_bombs, bomb_img,c,l)
+                player2 = Player2(boneco1_img,all_sprites, all_bombs,c,l,imagem)
                 
     # adicionando aos grupos de sprites
     all_sprites.add(player1)
