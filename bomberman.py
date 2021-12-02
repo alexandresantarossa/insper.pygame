@@ -7,10 +7,13 @@ from pygame.font import Font
 
 pygame.init()
 
-#Toca o hino
+# ----- Toca e deine a músicaS
 musica =pygame.mixer.Sound('assets/matue.mp3')
 musica.set_volume(0.1)
-musica.play()
+musica.play(-1)
+
+explosao = pygame.mixer.Sound("assets/explosao.mp3")
+explosao.set_volume(0.2)
 
 # ----- Gera tela principal
 WIDTH = 750
@@ -34,6 +37,8 @@ LAYOUT = [
     [1, 5, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,-1,1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,1,1],
         ]
+
+# ----- Toca a músicaS
 BONECO_WIDTH = 45
 BONECO_HEIGHT = 40
 BRICK_WIDTH=50
@@ -279,6 +284,8 @@ def game():
 
         def update(self):
             self.tempo -= 2 
+
+
             if self.tempo>30 and self.tempo<=40:
                 self.image=self.types[1]
                 centerx=self.expc
@@ -286,8 +293,9 @@ def game():
                 self.rect.centerx = centerx
                 self.rect.bottom = bottom
 
-              
-                
+            if self.tempo ==30:
+                explosao.play()
+
                 
             if self.tempo<=30 and self.tempo>20:
                 self.image=self.types[2]
@@ -295,7 +303,7 @@ def game():
                 bottom=self.expb
                 self.rect.centerx = centerx
                 self.rect.bottom = bottom
-               
+
                 
             if self.tempo<=20 and self.tempo>10:
                 self.image=self.types[3]
