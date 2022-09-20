@@ -151,6 +151,7 @@ def game():
             self.rect.x = x*BLOCK_SIDE
             self.rect.y = y*BLOCK_SIDE
 
+
     class wood(block):
         def __init__(self,img,x,y):
             # Construtor da classe mãe (Sprite).
@@ -160,7 +161,6 @@ def game():
             self.y = y 
         
         
-
     class Player(pygame.sprite.Sprite):
         def __init__(self, img, all_sprites, all_bombs,x,y,imagem):
             # Construtor da classe mãe (Sprite).
@@ -184,15 +184,12 @@ def game():
             self.shoot_ticks = 3000
         
 
-
-
         def update(self):
             # Atualização da posição do boneco
             self.rect.x = self.x*BLOCK_SIDE
             self.rect.y = self.y*BLOCK_SIDE
-
-        
-        
+    
+    
         def shoot(self):
             # A nova bomba vai ser criada logo acima do personagem com um cooldown de 3 segundos
             now = pygame.time.get_ticks()
@@ -234,7 +231,6 @@ def game():
         def update(self):
             self.tempo -= 2 
 
-
             if self.tempo>30 and self.tempo<=40:
                 self.image=self.types[1]
                 centerx=self.expc
@@ -244,7 +240,6 @@ def game():
 
             if self.tempo ==30:
                 explosao.play()
-
                 
             if self.tempo<=30 and self.tempo>20:
                 self.image=self.types[2]
@@ -252,7 +247,6 @@ def game():
                 bottom=self.expb
                 self.rect.centerx = centerx
                 self.rect.bottom = bottom
-
                 
             if self.tempo<=20 and self.tempo>10:
                 self.image=self.types[3]
@@ -262,7 +256,6 @@ def game():
                 self.rect.bottom = bottom 
         
             if self.tempo <= 5:
-                
                 centerx =self.expc
                 bottom = self.expb
                 self.rect.width *= 1 
@@ -303,12 +296,7 @@ def game():
                 
                 self.kill()
 
-                                
-      
-
-                
-
-
+                               
     game = True
     # Variável para o ajuste de velocidade
     clock = pygame.time.Clock()
