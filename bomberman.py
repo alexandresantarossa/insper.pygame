@@ -42,10 +42,7 @@ LAYOUT = [
 # ----- Define as constantes
 BONECO_WIDTH = 45
 BONECO_HEIGHT = 40
-BRICK_WIDTH=50
-BRICK_HEIGHT=50
-WOOD_WIDTH=50
-WOOD_HEIGHT=50
+BLOCK_SIDE = 50
 BOMB_WIDTH=90
 BOMB_HEIGHT=90
 EXP_WIDTH=100
@@ -66,9 +63,9 @@ boneco_img = pygame.transform.scale(boneco_img, (BONECO_WIDTH, 45))
 boneco1_img = pygame.image.load('assets/hulk.png').convert_alpha()
 boneco1_img = pygame.transform.scale(boneco1_img, (BONECO_WIDTH, BONECO_HEIGHT))
 brick_img = pygame.image.load('assets/bricks.png').convert_alpha()
-brick_img = pygame.transform.scale(brick_img, (BRICK_WIDTH, BRICK_HEIGHT)) 
+brick_img = pygame.transform.scale(brick_img, (BLOCK_SIDE, BLOCK_SIDE)) 
 wood_img = pygame.image.load('assets/wood.png').convert_alpha()
-wood_img = pygame.transform.scale(wood_img, (WOOD_WIDTH, WOOD_HEIGHT))
+wood_img = pygame.transform.scale(wood_img, (BLOCK_SIDE, BLOCK_SIDE))
 bomb_img=pygame.image.load('assets/bomb.png').convert_alpha()
 bomb_img = pygame.transform.scale(bomb_img, (BOMB_WIDTH, BOMB_HEIGHT))
 bonecobig_img = pygame.image.load('assets/hulk verde.png').convert_alpha()
@@ -144,41 +141,35 @@ def game():
     game = True
     # ----- Inicia estruturas de dados
     # Definindo os novos tipos
-    class brick(pygame.sprite.Sprite):
+    class block(pygame.sprite.Sprite):
         def __init__(self, img,x,y):
             # Construtor da classe mãe (Sprite).
             pygame.sprite.Sprite.__init__(self)
 
             self.image = img
             self.rect = self.image.get_rect()
-            self.rect.x = x*BRICK_WIDTH
-            self.rect.y = y*BRICK_HEIGHT
+            self.rect.x = x*BLOCK_SIDE
+            self.rect.y = y*BLOCK_SIDE
 
-    class wood(pygame.sprite.Sprite):
-        def __init__(self, img,x,y):
+    class wood(block):
+        def __init__(self,img,x,y):
             # Construtor da classe mãe (Sprite).
-            pygame.sprite.Sprite.__init__(self)
-
-            self.image = img
-            self.rect = self.image.get_rect()
-            self.rect.x = x*WOOD_WIDTH
-            self.rect.y = y*WOOD_HEIGHT
+            super().__init__(img,x,y)
 
             self.x = x
-            self.y =y 
+            self.y = y 
+        
         
 
-
-
-    class Player1(pygame.sprite.Sprite):
+    class Player(pygame.sprite.Sprite):
         def __init__(self, img, all_sprites, all_bombs,x,y,imagem):
             # Construtor da classe mãe (Sprite).
             pygame.sprite.Sprite.__init__(self)
 
             self.image = img
             self.rect = self.image.get_rect()
-            self.rect.x = x*BRICK_WIDTH
-            self.rect.y = y*BRICK_HEIGHT
+            self.rect.x = x*BLOCK_SIDE
+            self.rect.y = y*BLOCK_SIDE
             self.all_sprites = all_sprites
             self.all_bombs = all_bombs
             self.imagem = imagem
@@ -197,8 +188,8 @@ def game():
 
         def update(self):
             # Atualização da posição do boneco
-            self.rect.x = self.x*BRICK_WIDTH
-            self.rect.y = self.y*BRICK_HEIGHT
+            self.rect.x = self.x*BLOCK_SIDE
+            self.rect.y = self.y*BLOCK_SIDE
 
         
         
@@ -218,51 +209,6 @@ def game():
                 self.all_bombs.add(new_bomb)
 
                 
-
-    
-
-    class Player2(pygame.sprite.Sprite):
-        def __init__(self, img, all_sprites, all_bombs,x,y,imagem):
-            # Construtor da classe mãe (Sprite).
-            pygame.sprite.Sprite.__init__(self)
-
-            self.image = img
-            self.rect = self.image.get_rect()
-            self.rect.x = x*BRICK_WIDTH
-            self.rect.y = y*BRICK_HEIGHT
-            self.all_sprites = all_sprites
-            self.all_bombs = all_bombs
-            self.imagem = imagem
-
-            self.x = x
-            self.y = y 
-
-            #condicoes iniciais de tempo da bomba
-            self.last_update = pygame.time.get_ticks()
-            self.frame_ticks = 10
-            self.last_shot = pygame.time.get_ticks()
-            self.shoot_ticks = 3000
-
-        def update(self):
-            # Atualização da posição do boneco
-            self.rect.x = self.x*BRICK_WIDTH
-            self.rect.y = self.y*BRICK_HEIGHT
-
-
-            
-        def shoot(self):
-            # A nova bomba vai ser criada logo acima do personagem com um cooldown de 3 segundos
-            now = pygame.time.get_ticks()
-
-            elapsed_ticks = now - self.last_shot
-
-            if elapsed_ticks > self.shoot_ticks:
-
-                self.last_shot = now
-
-                new_bomb = Bomb(self.imagem, self.rect.bottom+17, self.rect.centerx+2, self.x, self.y)
-                self.all_sprites.add(new_bomb)
-                self.all_bombs.add(new_bomb)
 
     class Bomb(pygame.sprite.Sprite):
         # Construtor da classe.
@@ -384,7 +330,7 @@ def game():
             item = LAYOUT[l][c]
             
             if item == 1:
-                pedra = brick(brick_img,c,l)
+                pedra = block(brick_img,c,l)
                 all_bricks.add(pedra)
             
             if item == 0:
@@ -399,12 +345,12 @@ def game():
             if item == 5 :
 
                 LAYOUT[l][c] =0 
-                player1 = Player1(boneco_img, all_sprites, all_bombs,c,l,imagem)
+                player1 = Player(boneco_img, all_sprites, all_bombs,c,l,imagem)
                 
             
             if item == 6:
                 LAYOUT[l][c] =0
-                player2 = Player2(boneco1_img,all_sprites, all_bombs,c,l,imagem)
+                player2 = Player(boneco1_img,all_sprites, all_bombs,c,l,imagem)
                 
     # adicionando aos grupos de sprites
     all_sprites.add(player1)
