@@ -8,11 +8,11 @@ from pygame.font import Font
 pygame.init()
 
 # ----- Toca e define a músicaS
-musica =pygame.mixer.Sound('assets/matue.mp3')
+musica =pygame.mixer.Sound('assets/sounds/matue.mp3')
 musica.set_volume(0.1)
 musica.play(-1)
 
-explosao = pygame.mixer.Sound("assets/explosao.mp3")
+explosao = pygame.mixer.Sound("assets/sounds/explosao.mp3")
 explosao.set_volume(0.2)
 
 # ----- Gera tela principal
@@ -58,29 +58,29 @@ def draw_text(text, font, color, surface, x, y):
     surface.blit(textobj, textrect)
 
 # ----- Carrega e muda o tamanho das imagens
-boneco_img = pygame.image.load('assets/hulk verde.png').convert_alpha()
+boneco_img = pygame.image.load('assets/images/hulk verde.png').convert_alpha()
 boneco_img = pygame.transform.scale(boneco_img, (BONECO_WIDTH, 45))
-boneco1_img = pygame.image.load('assets/hulk.png').convert_alpha()
+boneco1_img = pygame.image.load('assets/images/hulk.png').convert_alpha()
 boneco1_img = pygame.transform.scale(boneco1_img, (BONECO_WIDTH, BONECO_HEIGHT))
-brick_img = pygame.image.load('assets/bricks.png').convert_alpha()
+brick_img = pygame.image.load('assets/images/bricks.png').convert_alpha()
 brick_img = pygame.transform.scale(brick_img, (BLOCK_SIDE, BLOCK_SIDE)) 
-wood_img = pygame.image.load('assets/wood.png').convert_alpha()
+wood_img = pygame.image.load('assets/images/wood.png').convert_alpha()
 wood_img = pygame.transform.scale(wood_img, (BLOCK_SIDE, BLOCK_SIDE))
-bomb_img=pygame.image.load('assets/bomb.png').convert_alpha()
+bomb_img=pygame.image.load('assets/images/bomb.png').convert_alpha()
 bomb_img = pygame.transform.scale(bomb_img, (BOMB_WIDTH, BOMB_HEIGHT))
-bonecobig_img = pygame.image.load('assets/hulk verde.png').convert_alpha()
+bonecobig_img = pygame.image.load('assets/images/hulk verde.png').convert_alpha()
 bonecobig_img = pygame.transform.scale(bonecobig_img, (300, 300))
-boneco1big_img = pygame.image.load('assets/hulk.png').convert_alpha()
+boneco1big_img = pygame.image.load('assets/images/hulk.png').convert_alpha()
 boneco1big_img = pygame.transform.scale(boneco1big_img, (300, 300))
-sand_img = pygame.image.load('assets/sand.png').convert_alpha()
+sand_img = pygame.image.load('assets/images/sand.png').convert_alpha()
 sand_img = pygame.transform.scale(sand_img, (750, 650))
-bg_img = pygame.image.load('assets/bg.jpeg').convert_alpha()
+bg_img = pygame.image.load('assets/images/bg.jpeg').convert_alpha()
 bg_img = pygame.transform.scale(bg_img, (750, 650))
-exp1_img=pygame.image.load('assets/exp1.png').convert_alpha()
+exp1_img=pygame.image.load('assets/images/exp1.png').convert_alpha()
 exp1_img = pygame.transform.scale(exp1_img, (EXP_WIDTH, EXP_HEIGHT))
-exp2_img=pygame.image.load('assets/exp2.png').convert_alpha()
+exp2_img=pygame.image.load('assets/images/exp2.png').convert_alpha()
 exp2_img = pygame.transform.scale(exp2_img, (EXP_WIDTH, EXP_HEIGHT))
-exp3_img=pygame.image.load('assets/exp3.png').convert_alpha()
+exp3_img=pygame.image.load('assets/images/exp3.png').convert_alpha()
 exp3_img = pygame.transform.scale(exp3_img, (EXP_WIDTH, EXP_HEIGHT))
 imagem=[bomb_img,exp1_img,exp2_img,exp3_img]
 
@@ -269,10 +269,6 @@ def game():
                     possiveis = [(self.i + 1, self.j), (self.i - 1, self.j), (self.i, self.j+ 1), (self.i, self.j - 1)]
                     # self.kill()
                     for wood in woods:
-                        #os comentarios abaixo foram feitos para nos ajudar a achar o erro na matriz(invertemos linha e coluna), caso queira ver tambem
-                        #print(wood)
-                        # print((wood.y, wood.x))
-                        # print((self.i, self.j))
                         if (wood.y, wood.x) in possiveis:
                 
                             LAYOUT[wood.y][wood.x] = 0
