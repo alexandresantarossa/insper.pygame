@@ -205,7 +205,23 @@ def game():
                 self.all_sprites.add(new_bomb)
                 self.all_bombs.add(new_bomb)
 
-                
+        def move_left(self):
+            if LAYOUT[self.y][self.x - 1] in[0,-1] :
+                self.x -= 1 
+        
+        def move_right(self):
+            if LAYOUT[self.y][self.x + 1] in[0,-1]:
+                self.x += 1
+        
+        def move_up(self):
+            if LAYOUT[self.y - 1][self.x] in[0,-1]:
+                self.y -= 1
+
+        def move_down(self):
+            if LAYOUT[self.y + 1][self.x] in[0,-1]:
+                self.y += 1
+
+
 
     class Bomb(pygame.sprite.Sprite):
         # Construtor da classe.
@@ -358,45 +374,36 @@ def game():
             if event.type == pygame.QUIT:
                 game = False
             # Verifica se apertou alguma tecla.
-            if event.type == pygame.KEYDOWN:    
+            if event.type == pygame.KEYDOWN: 
+
                 # AÇÕES PLAYER 1
-            
                 if event.key == pygame.K_LEFT:
-                    if LAYOUT[player1.y][player1.x - 1] in[0,-1] :
-                        player1.x -= 1 
+                    player1.move_left()
             
                 if event.key == pygame.K_RIGHT: 
-                    if LAYOUT[player1.y][player1.x + 1] in[0,-1]:
-                        player1.x += 1 
+                    player1.move_right()
             
                 if event.key == pygame.K_UP:
-                    if LAYOUT[player1.y - 1][player1.x] in[0,-1]:
-                        player1.y -=1
+                    player1.move_up()
                 
                 if event.key == pygame.K_DOWN:
-                    if LAYOUT[player1.y + 1][player1.x] in[0,-1]:
-                        player1.y +=1
+                    player1.move_down()
                     
                 if event.key == pygame.K_RSHIFT:
                     player1.shoot()
                 
                 #AÇÕES PLAYER 2
-
                 if event.key == pygame.K_a:
-                    if LAYOUT[player2.y][player2.x - 1] in[0,-1] :
-                        player2.x -= 1 
+                    player2.move_left()
                 
                 if event.key == pygame.K_d: 
-                    if LAYOUT[player2.y][player2.x + 1] in[0,-1]:
-                        player2.x += 1 
+                    player2.move_right()
                 
                 if event.key == pygame.K_w:
-                    if LAYOUT[player2.y - 1][player2.x] in[0,-1]:
-                        player2.y -=1
+                    player2.move_up()
                 
                 if event.key == pygame.K_s:
-                    if LAYOUT[player2.y + 1][player2.x] in[0,-1]:
-                        player2.y +=1
+                    player2.move_down()
                     
                 if event.key == pygame.K_SPACE:
                     player2.shoot()
