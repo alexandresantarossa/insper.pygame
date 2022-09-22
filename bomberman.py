@@ -8,11 +8,11 @@ from pygame.font import Font
 pygame.init()
 
 # ----- Toca e define a músicaS
-musica =pygame.mixer.Sound('assets/matue.mp3')
+musica =pygame.mixer.Sound('assets/sounds/matue.mp3')
 musica.set_volume(0.1)
 musica.play(-1)
 
-explosao = pygame.mixer.Sound("assets/explosao.mp3")
+explosao = pygame.mixer.Sound("assets/sounds/explosao.mp3")
 explosao.set_volume(0.2)
 
 # ----- Gera tela principal
@@ -42,10 +42,7 @@ LAYOUT = [
 # ----- Define as constantes
 BONECO_WIDTH = 45
 BONECO_HEIGHT = 40
-BRICK_WIDTH=50
-BRICK_HEIGHT=50
-WOOD_WIDTH=50
-WOOD_HEIGHT=50
+BLOCK_SIDE = 50
 BOMB_WIDTH=90
 BOMB_HEIGHT=90
 EXP_WIDTH=100
@@ -61,29 +58,29 @@ def draw_text(text, font, color, surface, x, y):
     surface.blit(textobj, textrect)
 
 # ----- Carrega e muda o tamanho das imagens
-boneco_img = pygame.image.load('assets/hulk verde.png').convert_alpha()
+boneco_img = pygame.image.load('assets/images/hulk verde.png').convert_alpha()
 boneco_img = pygame.transform.scale(boneco_img, (BONECO_WIDTH, 45))
-boneco1_img = pygame.image.load('assets/hulk.png').convert_alpha()
+boneco1_img = pygame.image.load('assets/images/hulk.png').convert_alpha()
 boneco1_img = pygame.transform.scale(boneco1_img, (BONECO_WIDTH, BONECO_HEIGHT))
-brick_img = pygame.image.load('assets/bricks.png').convert_alpha()
-brick_img = pygame.transform.scale(brick_img, (BRICK_WIDTH, BRICK_HEIGHT)) 
-wood_img = pygame.image.load('assets/wood.png').convert_alpha()
-wood_img = pygame.transform.scale(wood_img, (WOOD_WIDTH, WOOD_HEIGHT))
-bomb_img=pygame.image.load('assets/bomb.png').convert_alpha()
+brick_img = pygame.image.load('assets/images/bricks.png').convert_alpha()
+brick_img = pygame.transform.scale(brick_img, (BLOCK_SIDE, BLOCK_SIDE)) 
+wood_img = pygame.image.load('assets/images/wood.png').convert_alpha()
+wood_img = pygame.transform.scale(wood_img, (BLOCK_SIDE, BLOCK_SIDE))
+bomb_img=pygame.image.load('assets/images/bomb.png').convert_alpha()
 bomb_img = pygame.transform.scale(bomb_img, (BOMB_WIDTH, BOMB_HEIGHT))
-bonecobig_img = pygame.image.load('assets/hulk verde.png').convert_alpha()
+bonecobig_img = pygame.image.load('assets/images/hulk verde.png').convert_alpha()
 bonecobig_img = pygame.transform.scale(bonecobig_img, (300, 300))
-boneco1big_img = pygame.image.load('assets/hulk.png').convert_alpha()
+boneco1big_img = pygame.image.load('assets/images/hulk.png').convert_alpha()
 boneco1big_img = pygame.transform.scale(boneco1big_img, (300, 300))
-sand_img = pygame.image.load('assets/sand.png').convert_alpha()
+sand_img = pygame.image.load('assets/images/sand.png').convert_alpha()
 sand_img = pygame.transform.scale(sand_img, (750, 650))
-bg_img = pygame.image.load('assets/bg.jpeg').convert_alpha()
+bg_img = pygame.image.load('assets/images/bg.jpeg').convert_alpha()
 bg_img = pygame.transform.scale(bg_img, (750, 650))
-exp1_img=pygame.image.load('assets/exp1.png').convert_alpha()
+exp1_img=pygame.image.load('assets/images/exp1.png').convert_alpha()
 exp1_img = pygame.transform.scale(exp1_img, (EXP_WIDTH, EXP_HEIGHT))
-exp2_img=pygame.image.load('assets/exp2.png').convert_alpha()
+exp2_img=pygame.image.load('assets/images/exp2.png').convert_alpha()
 exp2_img = pygame.transform.scale(exp2_img, (EXP_WIDTH, EXP_HEIGHT))
-exp3_img=pygame.image.load('assets/exp3.png').convert_alpha()
+exp3_img=pygame.image.load('assets/images/exp3.png').convert_alpha()
 exp3_img = pygame.transform.scale(exp3_img, (EXP_WIDTH, EXP_HEIGHT))
 imagem=[bomb_img,exp1_img,exp2_img,exp3_img]
 
@@ -144,41 +141,35 @@ def game():
     game = True
     # ----- Inicia estruturas de dados
     # Definindo os novos tipos
-    class brick(pygame.sprite.Sprite):
+    class block(pygame.sprite.Sprite):
         def __init__(self, img,x,y):
             # Construtor da classe mãe (Sprite).
             pygame.sprite.Sprite.__init__(self)
 
             self.image = img
             self.rect = self.image.get_rect()
-            self.rect.x = x*BRICK_WIDTH
-            self.rect.y = y*BRICK_HEIGHT
+            self.rect.x = x*BLOCK_SIDE
+            self.rect.y = y*BLOCK_SIDE
 
-    class wood(pygame.sprite.Sprite):
-        def __init__(self, img,x,y):
+
+    class wood(block):
+        def __init__(self,img,x,y):
             # Construtor da classe mãe (Sprite).
-            pygame.sprite.Sprite.__init__(self)
-
-            self.image = img
-            self.rect = self.image.get_rect()
-            self.rect.x = x*WOOD_WIDTH
-            self.rect.y = y*WOOD_HEIGHT
+            super().__init__(img,x,y)
 
             self.x = x
-            self.y =y 
+            self.y = y 
         
-
-
-
-    class Player1(pygame.sprite.Sprite):
+        
+    class Player(pygame.sprite.Sprite):
         def __init__(self, img, all_sprites, all_bombs,x,y,imagem):
             # Construtor da classe mãe (Sprite).
             pygame.sprite.Sprite.__init__(self)
 
             self.image = img
             self.rect = self.image.get_rect()
-            self.rect.x = x*BRICK_WIDTH
-            self.rect.y = y*BRICK_HEIGHT
+            self.rect.x = x*BLOCK_SIDE
+            self.rect.y = y*BLOCK_SIDE
             self.all_sprites = all_sprites
             self.all_bombs = all_bombs
             self.imagem = imagem
@@ -193,63 +184,12 @@ def game():
             self.shoot_ticks = 3000
         
 
-
-
         def update(self):
             # Atualização da posição do boneco
-            self.rect.x = self.x*BRICK_WIDTH
-            self.rect.y = self.y*BRICK_HEIGHT
-
-        
-        
-        def shoot(self):
-            # A nova bomba vai ser criada logo acima do personagem com um cooldown de 3 segundos
-            now = pygame.time.get_ticks()
-
-            elapsed_ticks = now - self.last_shot
-
-            if elapsed_ticks > self.shoot_ticks:
-                
-
-                self.last_shot = now
-
-                new_bomb = Bomb(self.imagem, self.rect.bottom+17, self.rect.centerx+2, self.x, self.y)
-                self.all_sprites.add(new_bomb)
-                self.all_bombs.add(new_bomb)
-
-                
-
+            self.rect.x = self.x*BLOCK_SIDE
+            self.rect.y = self.y*BLOCK_SIDE
     
-
-    class Player2(pygame.sprite.Sprite):
-        def __init__(self, img, all_sprites, all_bombs,x,y,imagem):
-            # Construtor da classe mãe (Sprite).
-            pygame.sprite.Sprite.__init__(self)
-
-            self.image = img
-            self.rect = self.image.get_rect()
-            self.rect.x = x*BRICK_WIDTH
-            self.rect.y = y*BRICK_HEIGHT
-            self.all_sprites = all_sprites
-            self.all_bombs = all_bombs
-            self.imagem = imagem
-
-            self.x = x
-            self.y = y 
-
-            #condicoes iniciais de tempo da bomba
-            self.last_update = pygame.time.get_ticks()
-            self.frame_ticks = 10
-            self.last_shot = pygame.time.get_ticks()
-            self.shoot_ticks = 3000
-
-        def update(self):
-            # Atualização da posição do boneco
-            self.rect.x = self.x*BRICK_WIDTH
-            self.rect.y = self.y*BRICK_HEIGHT
-
-
-            
+    
         def shoot(self):
             # A nova bomba vai ser criada logo acima do personagem com um cooldown de 3 segundos
             now = pygame.time.get_ticks()
@@ -257,12 +197,31 @@ def game():
             elapsed_ticks = now - self.last_shot
 
             if elapsed_ticks > self.shoot_ticks:
+                
 
                 self.last_shot = now
 
                 new_bomb = Bomb(self.imagem, self.rect.bottom+17, self.rect.centerx+2, self.x, self.y)
                 self.all_sprites.add(new_bomb)
                 self.all_bombs.add(new_bomb)
+
+        def move_left(self):
+            if LAYOUT[self.y][self.x - 1] in[0,-1] :
+                self.x -= 1 
+        
+        def move_right(self):
+            if LAYOUT[self.y][self.x + 1] in[0,-1]:
+                self.x += 1
+        
+        def move_up(self):
+            if LAYOUT[self.y - 1][self.x] in[0,-1]:
+                self.y -= 1
+
+        def move_down(self):
+            if LAYOUT[self.y + 1][self.x] in[0,-1]:
+                self.y += 1
+
+
 
     class Bomb(pygame.sprite.Sprite):
         # Construtor da classe.
@@ -288,7 +247,6 @@ def game():
         def update(self):
             self.tempo -= 2 
 
-
             if self.tempo>30 and self.tempo<=40:
                 self.image=self.types[1]
                 centerx=self.expc
@@ -298,7 +256,6 @@ def game():
 
             if self.tempo ==30:
                 explosao.play()
-
                 
             if self.tempo<=30 and self.tempo>20:
                 self.image=self.types[2]
@@ -306,7 +263,6 @@ def game():
                 bottom=self.expb
                 self.rect.centerx = centerx
                 self.rect.bottom = bottom
-
                 
             if self.tempo<=20 and self.tempo>10:
                 self.image=self.types[3]
@@ -316,7 +272,6 @@ def game():
                 self.rect.bottom = bottom 
         
             if self.tempo <= 5:
-                
                 centerx =self.expc
                 bottom = self.expb
                 self.rect.width *= 1 
@@ -330,10 +285,6 @@ def game():
                     possiveis = [(self.i + 1, self.j), (self.i - 1, self.j), (self.i, self.j+ 1), (self.i, self.j - 1)]
                     # self.kill()
                     for wood in woods:
-                        #os comentarios abaixo foram feitos para nos ajudar a achar o erro na matriz(invertemos linha e coluna), caso queira ver tambem
-                        #print(wood)
-                        # print((wood.y, wood.x))
-                        # print((self.i, self.j))
                         if (wood.y, wood.x) in possiveis:
                 
                             LAYOUT[wood.y][wood.x] = 0
@@ -349,20 +300,15 @@ def game():
                             if (player.y,player.x) in possiveis:
                                 LAYOUT[player.y][player.x] = 0
                                 if player == player1:
-                                    win_p2()
+                                    win(2, boneco1big_img)
                                 if player == player2:
-                                    win_p1()
+                                    win(1, bonecobig_img)
 
                                 player.kill()
                 
                 self.kill()
 
-                                
-      
-
-                
-
-
+                               
     game = True
     # Variável para o ajuste de velocidade
     clock = pygame.time.Clock()
@@ -384,7 +330,7 @@ def game():
             item = LAYOUT[l][c]
             
             if item == 1:
-                pedra = brick(brick_img,c,l)
+                pedra = block(brick_img,c,l)
                 all_bricks.add(pedra)
             
             if item == 0:
@@ -399,12 +345,12 @@ def game():
             if item == 5 :
 
                 LAYOUT[l][c] =0 
-                player1 = Player1(boneco_img, all_sprites, all_bombs,c,l,imagem)
+                player1 = Player(boneco_img, all_sprites, all_bombs,c,l,imagem)
                 
             
             if item == 6:
                 LAYOUT[l][c] =0
-                player2 = Player2(boneco1_img,all_sprites, all_bombs,c,l,imagem)
+                player2 = Player(boneco1_img,all_sprites, all_bombs,c,l,imagem)
                 
     # adicionando aos grupos de sprites
     all_sprites.add(player1)
@@ -428,45 +374,36 @@ def game():
             if event.type == pygame.QUIT:
                 game = False
             # Verifica se apertou alguma tecla.
-            if event.type == pygame.KEYDOWN:    
+            if event.type == pygame.KEYDOWN: 
+
                 # AÇÕES PLAYER 1
-            
                 if event.key == pygame.K_LEFT:
-                    if LAYOUT[player1.y][player1.x - 1] in[0,-1] :
-                        player1.x -= 1 
+                    player1.move_left()
             
                 if event.key == pygame.K_RIGHT: 
-                    if LAYOUT[player1.y][player1.x + 1] in[0,-1]:
-                        player1.x += 1 
+                    player1.move_right()
             
                 if event.key == pygame.K_UP:
-                    if LAYOUT[player1.y - 1][player1.x] in[0,-1]:
-                        player1.y -=1
+                    player1.move_up()
                 
                 if event.key == pygame.K_DOWN:
-                    if LAYOUT[player1.y + 1][player1.x] in[0,-1]:
-                        player1.y +=1
+                    player1.move_down()
                     
                 if event.key == pygame.K_RSHIFT:
                     player1.shoot()
                 
                 #AÇÕES PLAYER 2
-
                 if event.key == pygame.K_a:
-                    if LAYOUT[player2.y][player2.x - 1] in[0,-1] :
-                        player2.x -= 1 
+                    player2.move_left()
                 
                 if event.key == pygame.K_d: 
-                    if LAYOUT[player2.y][player2.x + 1] in[0,-1]:
-                        player2.x += 1 
+                    player2.move_right()
                 
                 if event.key == pygame.K_w:
-                    if LAYOUT[player2.y - 1][player2.x] in[0,-1]:
-                        player2.y -=1
+                    player2.move_up()
                 
                 if event.key == pygame.K_s:
-                    if LAYOUT[player2.y + 1][player2.x] in[0,-1]:
-                        player2.y +=1
+                    player2.move_down()
                     
                 if event.key == pygame.K_SPACE:
                     player2.shoot()
@@ -493,52 +430,19 @@ def game():
     pygame.quit()  # Função do PyGame que finaliza os recursos utilizados
 
 # ----- Configura as telas finais de vitória de cada jogador
-def win_p1():
+def win(n_player, img_winner):
     while True:
 
         window.fill((0, 255, 100))
         window.blit(bg_img, (0,0))
 
-        draw_text('O JOGADOR 1 VENCEU!', title, (255, 255, 255), window, 50, 100)
-        window.blit(bonecobig_img, (200, 300))
+        draw_text('O JOGADOR {} VENCEU!'.format(str(n_player)), title, (255, 255, 255), window, 50, 100)
+        window.blit(img_winner, (200, 300))
 
         mx, my = pygame.mouse.get_pos()
 
         button_1 = pygame.Rect(250, 200, 230, 40)
 
-
-        if button_1.collidepoint((mx, my)):
-            if click:
-                pygame.QUIT()
-        pygame.draw.rect(window, (255, 0, 0), button_1)
-        draw_text('SAIR', font, (0, 0, 0), window, 330, 205)
-
-        click = False
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
-
-        pygame.display.update()
-
-def win_p2():
-    while True:
-
-        window.fill((0, 255, 100))
-        window.blit(bg_img, (0,0))
-
-        draw_text('O JOGADOR 2 VENCEU!', title, (255, 255, 255), window, 50, 100)
-        window.blit(boneco1big_img, (200, 300))
-
-        mx, my = pygame.mouse.get_pos()
-
-
-        button_1 = pygame.Rect(250, 200, 230, 40)
 
         if button_1.collidepoint((mx, my)):
             if click:
